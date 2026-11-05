@@ -143,13 +143,16 @@ Ingresa con cualquier navegador moderno a:
 
 ---
 
-## 👨‍💻 Autor
+## 👨‍🏫 Información Académica y Autoría
 
-- **Nombre:** Gerson Misael Pintado Huaman
-- **Usuario GitHub:** [@GMPH2007](https://github.com/GMPH2007)
-- **Proyecto:** PlantUML Studio IDE
+| Rol | Nombre | Identificador / Enlace |
+| :--- | :--- | :--- |
+| **Docente** | **Ing. Javier Eduardo Jaramillo Atoche** | Docente de Ingeniería |
+| **Estudiante / Desarrollador** | **Gerson Misael Pintado Huaman** | [@GMPH2007](https://github.com/GMPH2007) |
+| **Repositorio Oficial** | **PlantUML Studio** | [github.com/GMPH2007/plantuml-studio](https://github.com/GMPH2007/plantuml-studio) |
+| **Aplicación Web en Vivo** | **Vercel Cloud** | [plantuml-studio-wheat.vercel.app](https://plantuml-studio-wheat.vercel.app) |
 
----
+> 🏷️ **Marca de agua oficial:** Todos los diagramas generados y exportados por la aplicación incorporan automáticamente la firma de autoría con los datos del docente y estudiante.
 
 ## 📄 Licencia
 
