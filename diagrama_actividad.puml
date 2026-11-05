@@ -1,0 +1,68 @@
+@startuml Actividad_Anuncios_y_Demora
+title Diagrama de Actividad: Lógica de Anuncios y Demora
+
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam defaultFontName "Segoe UI", "Arial", sans-serif
+skinparam defaultFontSize 13
+
+skinparam ActivityBackgroundColor #EFF6FF
+skinparam ActivityBorderColor #2563EB
+skinparam ActivityFontColor #1E293B
+
+skinparam ActivityDiamondBackgroundColor #FEF3C7
+skinparam ActivityDiamondBorderColor #F59E0B
+skinparam ActivityDiamondFontColor #78350F
+
+skinparam ActivityBarColor #2563EB
+
+start
+
+:Usuario solicita acción protegida\n(Descarga, streaming o recompensa);
+
+if (¿Es usuario Premium?) then (Sí)
+    :Desbloquear acceso inmediatamente;
+    stop
+else (No / Gratuito)
+    :Configurar requisitos: Anuncio + Demora;
+endif
+
+fork
+    partition "Gestión de Demora (Cooldown/Timer)" {
+        :Iniciar temporizador (ej. 15 segundos);
+        :Mostrar barra de progreso / cuenta regresiva;
+        while (¿Tiempo > 0?) is (Sí)
+            :Decrementar segundo a segundo;
+        endwhile (Tiempo = 0)
+        :Demora completada satisfactoriamente;
+    }
+fork again
+    partition "Gestión de Anuncios (Ad Network)" {
+        :Cargar anuncio (Ad Request);
+        if (¿Anuncio cargó con éxito?) then (Sí)
+            :Reproducir anuncio / banner;
+            :Esperar a que el usuario visualice el anuncio;
+            :Registrar visualización completada;
+        else (Error / No Fill / Bloqueador)
+            :Registrar fallo de anuncio;
+            :Aplicar política de fallback;
+        endif
+    }
+end fork
+
+note right
+  <b>Condición de Desbloqueo:</b>
+  Tanto la <b>Demora</b> mínima obligatoria
+  como el <b>Anuncio</b> (o su fallback)
+  deben haber concluido.
+end note
+
+:Verificar token de validación (Demora OK + Anuncio OK);
+
+:Generar enlace seguro o habilitar función;
+
+:Notificar al usuario y entregar contenido;
+
+stop
+
+@enduml
