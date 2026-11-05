@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://plantuml-studio-wheat.vercel.app/sitemap.xml
