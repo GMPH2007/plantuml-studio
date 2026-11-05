@@ -1,7 +1,7 @@
 # 🎨 PlantUML Studio IDE
 
 > **Entorno de desarrollo web profesional, reactivo y en tiempo real para modelado y diagramación UML.**  
-> Desarrollado y diseñado por **Gerson Misael Pintado Huaman ([GMPH2007](https://github.com/GMPH2007))**.
+> Desarrollado y diseñado por **[**GMPH2007**](https://github.com/GMPH2007)**.
 
 [![En vivo en Vercel](https://img.shields.io/badge/Demo_En_Vivo-Vercel-black?style=for-the-badge&logo=vercel)](https://plantuml-studio-wheat.vercel.app)
 [![Licencia](https://img.shields.io/badge/Licencia-MIT-blue?style=for-the-badge)](#licencia)
@@ -148,7 +148,7 @@ Ingresa con cualquier navegador moderno a:
 | Rol | Nombre | Identificador / Enlace |
 | :--- | :--- | :--- |
 | **Docente** | **Ing. Javier Eduardo Jaramillo Atoche** | Docente de Ingeniería |
-| **Estudiante / Desarrollador** | **Gerson Misael Pintado Huaman** | [@GMPH2007](https://github.com/GMPH2007) |
+| **Estudiante / Desarrollador** | **GMPH2007** | [@GMPH2007](https://github.com/GMPH2007) |
 | **Repositorio Oficial** | **PlantUML Studio** | [github.com/GMPH2007/plantuml-studio](https://github.com/GMPH2007/plantuml-studio) |
 | **Aplicación Web en Vivo** | **Vercel Cloud** | [plantuml-studio-wheat.vercel.app](https://plantuml-studio-wheat.vercel.app) |
 
