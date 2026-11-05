@@ -1,0 +1,109 @@
+@startuml Flujo_Anuncios_y_Demora_Claro
+!theme plain
+title Gestión de Flujo: Anuncios vs. Demora / Tiempo de Espera (Tema Claro)
+
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam defaultFontName "Segoe UI", "Arial", sans-serif
+skinparam defaultFontSize 13
+skinparam roundcorner 10
+
+skinparam ArrowColor #2563EB
+skinparam ArrowFontColor #1E293B
+skinparam ArrowFontSize 12
+
+skinparam ActorBorderColor #2563EB
+skinparam ActorBackgroundColor #EFF6FF
+skinparam ActorFontColor #0F172A
+skinparam ActorFontStyle bold
+
+skinparam ParticipantBorderColor #3B82F6
+skinparam ParticipantBackgroundColor #EFF6FF
+skinparam ParticipantFontColor #0F172A
+skinparam ParticipantFontStyle bold
+
+skinparam NoteBackgroundColor #FEF9C3
+skinparam NoteBorderColor #EAB308
+skinparam NoteFontColor #713F12
+skinparam NoteFontSize 12
+
+skinparam GroupBackgroundColor #F8FAFC
+skinparam GroupBorderColor #94A3B8
+skinparam GroupHeaderFontColor #1E293B
+
+actor "Usuario" as User
+participant "App / Frontend" as App
+participant "Temporizador\n(Demora)" as Timer
+participant "Red de Anuncios\n(Ad Network)" as AdNet
+participant "Servidor / API" as Server
+
+autonumber "<b>[00]</b>"
+
+User -> App: Solicita acción / descarga / contenido
+activate App
+
+App -> Server: Validar tipo de cuenta y permisos
+activate Server
+Server --> App: Estado: Usuario Gratuito (Requiere Anuncio + Demora)
+deactivate Server
+
+note over App #DBEAFE
+  <b>ACLARACIÓN DE CONCEPTOS:</b>
+  * <b>Anuncio:</b> Contenido publicitario (SDK / Video / Interstitial).
+  * <b>Demora:</b> Temporizador de espera (Cooldown / Buffer / Seguridad).
+end note
+
+== Fase Concurrente: Carga de Anuncio y Temporizador de Demora ==
+
+par Proceso 1: Inicialización de Demora
+    App -> Timer: Iniciar cuenta regresiva (ej. 15 segundos)
+    activate Timer
+    Timer --> User: Muestra reloj / barra de demora ("Espere 15s...")
+else Proceso 2: Petición de Anuncio
+    App -> AdNet: Solicitar anuncio disponible (Ad Request)
+    activate AdNet
+    AdNet --> App: Retorna anuncio (Ad Impression lista)
+    deactivate AdNet
+    App -> User: Reproduce / muestra anuncio
+end
+
+== Manejo de Casos y Resolución de Confusiones ==
+
+alt Caso A: El anuncio termina pero la Demora continúa
+    User -> App: Anuncio completado
+    App --> User: Notifica: "Anuncio listo. Esperando finalización de demora..."
+    Timer -> App: Tiempo de demora cumplido (0s)
+    deactivate Timer
+    App -> App: Ambas condiciones satisfechas (Anuncio + Demora = OK)
+
+else Caso B: La Demora termina pero el anuncio sigue en reproducción
+    Timer -> App: Tiempo cumplido (0s)
+    deactivate Timer
+    App --> User: Muestra botón "Saltar anuncio" o espera fin de video
+    User -> App: Termina de ver o salta anuncio
+    App -> App: Ambas condiciones satisfechas
+
+else Caso C: Falla de red / Sin anuncio disponible (No Fill)
+    App -> AdNet: Solicita anuncio
+    activate AdNet
+    AdNet --> App: Error / No Fill (Sin anuncio)
+    deactivate AdNet
+    note right of App #FEE2E2
+      <b>Atención:</b> La demora previene abusos
+      incluso si la red de anuncios falla.
+    end note
+    Timer -> App: Espera a que termine la demora obligatoria
+    deactivate Timer
+end
+
+== Entrega de Contenido ==
+
+App -> Server: Solicitar token de acceso (Validado: Anuncio visto & Demora cumplida)
+activate Server
+Server --> App: Token válido / Enlace de descarga generado
+deactivate Server
+
+App --> User: ¡Acceso concedido! Descarga iniciada / Contenido desbloqueado
+deactivate App
+
+@enduml
