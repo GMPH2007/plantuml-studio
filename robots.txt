@@ -1,4 +1,34 @@
+# ==========================================
+# PlantUML Studio IDE - Robots.txt
+# Desarrollado por GMPH2007
+# https://plantuml-studio-wheat.vercel.app
+# ==========================================
+
+# Permitir a todos los motores de búsqueda oficiales mundiales
+User-agent: Googlebot
+User-agent: Googlebot-Image
+User-agent: Bingbot
+User-agent: DuckDuckBot
+User-agent: Slurp
+User-agent: Baiduspider
+User-agent: YandexBot
+User-agent: Applebot
+User-agent: Twitterbot
+User-agent: facebookexternalhit
+Allow: /
+
+# Regla general para indexadores legítimos
 User-agent: *
 Allow: /
 
+# Bloquear scrapers maliciosos y clonadores automáticos de webs
+User-agent: HTTrack
+User-agent: SiteSucker
+User-agent: Scrapy
+User-agent: Offline Explorer
+User-agent: Teleport Pro
+Disallow: /
+
+# Mapa del sitio oficial
 Sitemap: https://plantuml-studio-wheat.vercel.app/sitemap.xml
+Sitemap: https://gmph2007.github.io/plantuml-studio/sitemap.xml
