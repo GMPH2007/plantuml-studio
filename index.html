@@ -98,6 +98,26 @@
       white-space: nowrap;
     }
 
+    
+    .badge-docente {
+      background: rgba(59, 130, 246, 0.15);
+      color: #93c5fd;
+      border: 1px solid rgba(59, 130, 246, 0.4);
+      font-size: 0.78rem;
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-weight: 600;
+      white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+    body.light-mode .badge-docente {
+      background: #eff6ff;
+      color: #1e40af;
+      border-color: #93c5fd;
+    }
+
     .badge-dev {
       background: linear-gradient(135deg, #1e3a8a, #3b82f6);
       color: #eff6ff;
@@ -565,7 +585,27 @@
         font-size: 1.12rem;
       }
 
-      .badge-dev {
+      
+    .badge-docente {
+      background: rgba(59, 130, 246, 0.15);
+      color: #93c5fd;
+      border: 1px solid rgba(59, 130, 246, 0.4);
+      font-size: 0.78rem;
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-weight: 600;
+      white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+    body.light-mode .badge-docente {
+      background: #eff6ff;
+      color: #1e40af;
+      border-color: #93c5fd;
+    }
+
+    .badge-dev {
         font-size: 0.7rem;
         padding: 2px 7px;
       }
@@ -657,7 +697,11 @@
     <div class="brand-box">
       <img src="logo.png" alt="Logo PlantUML">
       <h1>PlantUML Studio</h1>
-      <a href="https://github.com/GMPH2007/plantuml-studio" target="_blank" class="badge-dev" title="Ver código en GitHub" style="text-decoration:none; display:inline-flex; align-items:center; gap:5px;"><svg height="13" width="13" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path></svg> GMPH2007</a>
+      <a href="https://github.com/GMPH2007/plantuml-studio" target="_blank" class="badge-dev" title="Ver código en GitHub" style="text-decoration:none; display:inline-flex; align-items:center; gap:5px;">
+        <svg height="13" width="13" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path></svg>
+        GMPH2007
+      </a>
+      <span class="badge-docente">👨‍🏫 Docente: Ing. Javier Eduardo Jaramillo Atoche</span>
       <span class="live-status"><span class="pulse"></span> En vivo</span>
     </div>
     <div class="top-tools">
@@ -751,9 +795,11 @@
         <!-- SVG o Tarjeta de Error -->
       </div>
 
-      <div class="panel-footer">
+      <div class="panel-footer" style="flex-wrap: wrap; gap: 8px;">
         <span id="status-scale">✓ Escala normal al 100%</span>
-        <span style="color: var(--subtext); font-size: 0.76rem; text-align: right;">Desarrollador: <a href="https://github.com/GMPH2007" target="_blank" style="color: var(--primary); font-weight: 700; text-decoration: none;">GMPH2007</a> | Docente: <b style="color: var(--text);">Ing. Javier Eduardo Jaramillo Atoche</b></span>
+        <span style="font-size: 0.82rem; font-weight: 500; text-align: right;">
+          Desarrollado por <a href="https://github.com/GMPH2007" target="_blank" style="color: var(--primary); font-weight: 700; text-decoration: none;">GMPH2007</a> &nbsp;|&nbsp; 👨‍🏫 Docente: <b style="color: var(--text); font-weight: 700;">Ing. Javier Eduardo Jaramillo Atoche</b>
+        </span>
       </div>
     </div>
   </div>
