@@ -106,4 +106,7 @@ deactivate Server
 App --> User: ¡Acceso concedido! Descarga iniciada / Contenido desbloqueado
 deactivate App
 
+
+right footer Desarrollado por: Gerson M. Pintado Huaman (GMPH2007)\nDocente: Ing. Javier Eduardo Jaramillo Atoche\nGitHub: https://github.com/GMPH2007/plantuml-studio
+
 @enduml
