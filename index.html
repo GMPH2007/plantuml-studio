@@ -1030,6 +1030,23 @@
   </div>
 
   <script>
+    /**
+     * PlantUML Studio IDE
+     * Copyright (c) 2026 GMPH2007 (https://github.com/GMPH2007/plantuml-studio)
+     * Docente: Ing. Javier Eduardo Jaramillo Atoche
+     * Protegido contra clonación no autorizada.
+     */
+    // PROTECCIÓN ANTI-ROBO (FRAME-BUSTER): Impide que otras webs roben e incrusten tu app
+    if (window.top !== window.self) {
+      try {
+        window.top.location = window.self.location;
+      } catch (e) {
+        document.addEventListener("DOMContentLoaded", () => {
+          document.body.innerHTML = '<div style="padding:50px;text-align:center;font-family:sans-serif;background:#0b0f19;color:#fff;"><h2>PlantUML Studio IDE</h2><p>Esta aplicación fue creada por GMPH2007. Para usarla de forma oficial y segura, ingresa a:</p><a href="https://plantuml-studio-wheat.vercel.app" target="_blank" style="color:#38bdf8;font-size:18px;font-weight:bold;">plantuml-studio-wheat.vercel.app</a></div>';
+        });
+      }
+    }
+
     const editor = document.getElementById('editor');
     const gutter = document.getElementById('gutter');
     const previewBox = document.getElementById('preview-box');
