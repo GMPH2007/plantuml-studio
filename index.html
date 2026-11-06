@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+  <link rel="preconnect" href="https://kroki.io" crossorigin>
+  <link rel="dns-prefetch" href="https://kroki.io">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta http-equiv="X-Content-Type-Options" content="nosniff">
@@ -10,7 +12,7 @@
   <link rel="indexnow" href="https://plantuml-studio-wheat.vercel.app/e4d7a8c392f1465ea731b8c29013f412.txt">
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
   <meta name="description" content="PlantUML Studio IDE - Editor y compilador de PlantUML en tiempo real en español. Sin publicidad, exportación HD a portapapeles, autodiagnóstico de errores y 100% responsivo para móviles. Desarrollado por GMPH2007.">
-  <meta name="keywords" content="plantuml, plantuml online, editor plantuml en vivo, plantuml studio, diagramas uml, plantuml español, gmph2007, vercel plantuml">
+  <meta name="keywords" content="PlantUML, PlantUML Studio, plantuml online editor, plantuml descargar gratis, plantuml para que sirve, plantuml diagramas de uml, editor plantuml online, editor plantuml en vivo, plantuml en español, plantuml gratis, diagramas uml online, gmph2007">
   <meta name="author" content="GMPH2007">
   <link rel="canonical" href="https://plantuml-studio-wheat.vercel.app/">
 
@@ -29,7 +31,79 @@
   <meta name="twitter:image" content="https://plantuml-studio-wheat.vercel.app/logo.png">
 
   <!-- Datos estructurados JSON-LD para Google Search -->
-    <!-- Datos estructurados JSON-LD con Valoraciones (Estrellas doradas en Google) -->
+      <!-- Rich Snippet FAQPage Schema para Google & Bing (#1 Ranking & Estrellas) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "¿Qué es PlantUML y para qué sirve?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "PlantUML es una herramienta de código abierto que permite crear diagramas de software profesionales escribiendo código simple en texto plano. Sirve para documentar sistemas, modelar bases de datos, diseñar arquitecturas de microservicios y generar diagramas de secuencia, clases, actividad y casos de uso de manera ágil sin arrastrar cajas manualmente."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "¿Cómo usar PlantUML Online gratis sin instalar Java ni Graphviz?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Con PlantUML Studio puedes crear y compilar diagramas directamente desde cualquier navegador web en PC, laptop o móvil (Android / iOS), sin necesidad de instalar Java Runtime Environment (JRE) ni Graphviz. Todo el renderizado es inmediato y sin anuncios."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "¿Cómo descargar gratis diagramas PlantUML en PNG HD y SVG?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "PlantUML Studio permite copiar en alta resolución (2.5x) al portapapeles con un clic para pegar en Word, PowerPoint, Notion o WhatsApp, además de descarga gratuita directa en formato PNG, SVG vectorial y archivo de código .puml."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "¿Qué tipos de diagramas de UML se pueden crear en PlantUML Studio?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Soporta diagramas de secuencia, clases, actividad, casos de uso, componentes, despliegue, arquitectura cloud de microservicios, máquinas de estado y mapas conceptuales."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "¿Por qué PlantUML Studio es la alternativa número 1 frente a otros editores?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Ofrece cero anuncios publicitarios, renderizado instantáneo en memoria RAM (0 ms), modo oscuro Dark Neón de alto contraste, linter con auto-reparación de errores de sintaxis en 1 clic y diseño 100% responsivo para móviles."
+        }
+      }
+    ]
+  }
+  </script>
+
+  <!-- BreadcrumbList Schema para Google Search -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Inicio",
+        "item": "https://plantuml-studio-wheat.vercel.app/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Editor PlantUML Online",
+        "item": "https://plantuml-studio-wheat.vercel.app/"
+      }
+    ]
+  }
+  </script>
+
+  <!-- Datos estructurados JSON-LD con Valoraciones (Estrellas doradas en Google) -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -887,6 +961,56 @@
       gap: 12px;
       margin: 14px 0;
     }
+    
+    /* FAQ ACCORDION INTERACTIVO PARA SEO #1 */
+    .seo-faq-section {
+      margin-top: 22px;
+      border-top: 1px solid var(--card-border);
+      padding-top: 18px;
+    }
+    .seo-faq-item {
+      background: var(--code-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      margin-bottom: 10px;
+      padding: 12px 16px;
+      transition: all 0.2s ease;
+    }
+    .seo-faq-item[open] {
+      border-color: #89b4fa;
+      background: rgba(137, 180, 250, 0.05);
+    }
+    .seo-faq-question {
+      font-weight: 600;
+      color: var(--text);
+      cursor: pointer;
+      user-select: none;
+      outline: none;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .seo-faq-question:hover {
+      color: #89b4fa;
+    }
+    .seo-faq-answer {
+      margin-top: 10px;
+      font-size: 0.88rem;
+      color: var(--subtext);
+      line-height: 1.6;
+    }
+    .seo-faq-answer strong {
+      color: var(--text);
+    }
+    .seo-faq-answer ul {
+      margin: 8px 0 0 18px;
+      padding: 0;
+    }
+    .seo-faq-answer li {
+      margin-bottom: 5px;
+    }
+
     .seo-feat-card {
       background: var(--code-bg);
       border: 1px solid var(--card-border);
@@ -2263,6 +2387,60 @@ Queue --> MS_Pay : Procesar cobro`
 
     <h3>📌 Diagramas Soportados:</h3>
     <p>Diagramas de Secuencia, Diagramas de Clases, Casos de Uso, Diagramas de Actividad, Diagramas de Componentes, Máquinas de Estado, Diagramas de Despliegue y Mapas Mentales.</p>
+      <!-- SECCIÓN DE PREGUNTAS FRECUENTES (FAQ) DE ALTO VALOR SEO -->
+    <div class="seo-faq-section">
+      <h3 style="font-size: 1.15rem; color: #89b4fa; margin: 0 0 14px 0;">❓ Preguntas Frecuentes sobre PlantUML (Guía Rápida)</h3>
+      
+      <details class="seo-faq-item" open>
+        <summary class="seo-faq-question">💡 ¿Qué es PlantUML y para qué sirve?</summary>
+        <div class="seo-faq-answer">
+          <strong>PlantUML</strong> es una herramienta estándar de código abierto que permite crear diagramas de software profesionales escribiendo código simple y legible en texto plano. Sirve para documentar sistemas, modelar bases de datos, diseñar arquitecturas de microservicios, mapear procesos de negocio y generar diagramas de secuencia, clases, actividad y casos de uso de manera ágil sin tener que arrastrar cajas manualmente.
+        </div>
+      </details>
+
+      <details class="seo-faq-item">
+        <summary class="seo-faq-question">🌐 ¿Cómo usar PlantUML Online gratis sin descargar ni instalar Java o Graphviz?</summary>
+        <div class="seo-faq-answer">
+          Con <strong>PlantUML Studio</strong> puedes crear y compilar diagramas directamente desde cualquier navegador web (Google Chrome, Microsoft Edge, Mozilla Firefox, Safari o teléfonos móviles Android/iOS). No requiere instalar Java Runtime Environment (JRE) ni Graphviz en tu computadora. Todo el renderizado se realiza en la nube en milisegundos con servidor acelerado y sin publicidad.
+        </div>
+      </details>
+
+      <details class="seo-faq-item">
+        <summary class="seo-faq-question">📥 ¿Cómo descargar gratis los diagramas o exportarlos en PNG HD y SVG?</summary>
+        <div class="seo-faq-answer">
+          PlantUML Studio permite exportar tus diagramas de forma 100% gratuita con un solo clic:
+          <ul>
+            <li><strong>Copiar HD (Portapapeles):</strong> Copia la imagen a 2.5x de resolución directamente para pegar en Word, PowerPoint, Notion o WhatsApp con <code>Ctrl + V</code>.</li>
+            <li><strong>Descargar PNG:</strong> Guarda una imagen rasterizada de alta definición nítida.</li>
+            <li><strong>Descargar SVG:</strong> Exporta un vector escalable sin pérdida de calidad para impresión técnica o diseño web.</li>
+            <li><strong>Descargar .puml:</strong> Descarga el archivo de código fuente para guardarlo en tu repositorio Git.</li>
+          </ul>
+        </div>
+      </details>
+
+      <details class="seo-faq-item">
+        <summary class="seo-faq-question">📊 ¿Qué tipos de diagramas de UML se pueden crear en PlantUML Studio?</summary>
+        <div class="seo-faq-answer">
+          PlantUML Studio soporta la totalidad de diagramas UML estándar de la industria:
+          <ul>
+            <li><strong>Diagramas de Secuencia:</strong> Flujo de mensajes e interacciones entre actores, servicios y bases de datos.</li>
+            <li><strong>Diagramas de Clases:</strong> Estructuras de clases, atributos, métodos, herencia y relaciones.</li>
+            <li><strong>Diagramas de Casos de Uso:</strong> Requerimientos funcionales y relación de usuarios con el sistema.</li>
+            <li><strong>Diagramas de Actividad:</strong> Flujogramas de procesos, decisiones condicionales y bifurcaciones paralelas.</li>
+            <li><strong>Diagramas de Componentes y Despliegue:</strong> Arquitecturas de microservicios, nodos cloud y contenedores.</li>
+            <li><strong>Diagramas de Estados:</strong> Transiciones de ciclo de vida de objetos.</li>
+          </ul>
+        </div>
+      </details>
+
+      <details class="seo-faq-item">
+        <summary class="seo-faq-question">🚀 ¿Por qué PlantUML Studio es la mejor alternativa frente a editores tradicionales?</summary>
+        <div class="seo-faq-answer">
+          A diferencia de los editores antiguos llenos de banners publicitarios y demoras de espera, PlantUML Studio ofrece <strong>0 publicidad</strong>, <strong>caché instantánea de 0 ms en memoria RAM</strong>, <strong>Modo Oscuro Dark Neón</strong> de alto contraste, <strong>sistema de auto-reparación de errores de sintaxis en 1 clic</strong> y un diseño 100% adaptado a teléfonos móviles con controles de zoom táctil.
+        </div>
+      </details>
+    </div>
+
   </footer>
 
 </body>
