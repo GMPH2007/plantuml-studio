@@ -6,6 +6,8 @@
   <meta http-equiv="X-Content-Type-Options" content="nosniff">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta name="google-site-verification" content="syBTzdyZT37km2RILaoBCQx2jBG0T7k40uDdqked9l0">
+  <meta name="msvalidate.01" content="plantuml-studio-bing-verification">
+  <link rel="indexnow" href="https://plantuml-studio-wheat.vercel.app/e4d7a8c392f1465ea731b8c29013f412.txt">
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
   <meta name="description" content="PlantUML Studio IDE - Editor y compilador de PlantUML en tiempo real en español. Sin publicidad, exportación HD a portapapeles, autodiagnóstico de errores y 100% responsivo para móviles. Desarrollado por GMPH2007.">
   <meta name="keywords" content="plantuml, plantuml online, editor plantuml en vivo, plantuml studio, diagramas uml, plantuml español, gmph2007, vercel plantuml">
@@ -58,7 +60,7 @@
     }
   }
   </script>
-    <title>PlantUML Studio — Free Online Real-Time PlantUML Editor (0 Ads, HD PNG)</title>
+    <title>PlantUML Studio — Editor PlantUML Online en Vivo Gratis (0 Ads, HD)</title>
   <link rel="alternate" hreflang="x-default" href="https://plantuml-studio-wheat.vercel.app/">
   <link rel="alternate" hreflang="es" href="https://plantuml-studio-wheat.vercel.app/?lang=es">
   <link rel="alternate" hreflang="en" href="https://plantuml-studio-wheat.vercel.app/?lang=en">
@@ -1559,8 +1561,11 @@ Queue --> MS_Pay : Procesar cobro`
 
     function loadSelectedTemplate(key) {
       if (!key || !PRO_TEMPLATES[key]) return;
-      applyTheme(PRO_TEMPLATES[key], document.getElementById('diagram-theme-select').value);
+      const cleanBody = cleanCodeStyles(PRO_TEMPLATES[key]);
+      editor.value = '@startuml\n' + cleanBody + '\n@enduml';
       document.getElementById('template-select').value = '';
+      updateLineNumbers();
+      triggerRender(true);
     }
 
     function downloadPUML() {
@@ -1633,25 +1638,16 @@ Queue --> MS_Pay : Procesar cobro`
     }
 
     function applyTheme(bodyCode, themeKey) {
+      // Mantiene el editor limpio, corto y enfocado solo en el diagrama del usuario
       const cleanBody = cleanCodeStyles(bodyCode);
-      const header = THEMES[themeKey] || '';
-      let fullCode = '@startuml\n';
-      if (header) fullCode += header + '\n\n';
-      fullCode += cleanBody + '\n@enduml';
-      editor.value = fullCode;
+      editor.value = '@startuml\n' + cleanBody + '\n@enduml';
       updateLineNumbers();
       triggerRender(true);
     }
 
     function changeDiagramTheme(themeKey) {
-      if (themeKey === 'simple') {
-        const cleanBody = cleanCodeStyles(editor.value);
-        editor.value = '@startuml\n' + cleanBody + '\n@enduml';
-        updateLineNumbers();
-        triggerRender(true);
-      } else {
-        applyTheme(editor.value, themeKey);
-      }
+      // Cambia el tema instantáneamente en el lienzo sin alargar ni alterar el código del usuario
+      triggerRender(true);
     }
 
     function triggerRender(immediate) {
@@ -1670,7 +1666,7 @@ Queue --> MS_Pay : Procesar cobro`
     const VALID_START_REGEX = /^(skinparam|actor|participant|database|boundary|control|entity|collections|queue|title|right\s+footer|left\s+footer|footer|endfooter|header|endheader|autonumber|scale|alt|else|opt|loop|group|end|ref|note|end\s*note|class|interface|enum|package|node|folder|frame|cloud|database|storage|artifact|usecase|rectangle|state|start|stop|if|else|elseif|endif|while|endwhile|repeat|backward|fork|split|detach|@startuml|@enduml|!theme|'|\/')(?:\b|[\s{:])/i;
     const ARROW_REGEX = /^[\w"().\s]+(-->|->|<-|<--|\.\.>|<\.\.|==|===)[\w"().\s]+/i;
 
-    function findExactCodeErrors(code, serverMsg) {
+    function findExactCodeErrors(code, serverMsg, injectedLines = 0) {
       const lines = code.split('\n');
       const detectedBadLines = [];
       let isSplitSkinparam = false;
@@ -1752,8 +1748,15 @@ Queue --> MS_Pay : Procesar cobro`
 
       const serverLineMatch = serverMsg.match(/line:\s*(\d+)/i);
       let sLine = serverLineMatch ? parseInt(serverLineMatch[1], 10) : 1;
-      
-      if (sLine < lines.length && lines[sLine] && !VALID_START_REGEX.test(lines[sLine].trim())) {
+
+      // Ajustar línea del servidor restando los estilos inyectados tras bambalinas
+      if (injectedLines > 0 && sLine > injectedLines) {
+        sLine = sLine - injectedLines;
+      }
+      if (sLine < 1) sLine = 1;
+      if (sLine > lines.length) sLine = lines.length;
+
+      if (sLine < lines.length && lines[sLine] && !VALID_START_REGEX.test(lines[sLine].trim()) && !lines[sLine].trim().startsWith(':')) {
         sLine = sLine + 1;
       }
 
@@ -1842,6 +1845,13 @@ Queue --> MS_Pay : Procesar cobro`
       } else if (type === 'clean_junk') {
         const badSet = new Set(diag.lines.map(n => n - 1));
         lines = lines.filter((_, idx) => !badSet.has(idx));
+        editor.value = lines.join('\n');
+      } else if (type === 'activity_missing_colons') {
+        const idx = diag.targetLine - 1;
+        let t = lines[idx].trim();
+        if (!t.startsWith(':')) t = ':' + t;
+        if (!t.endsWith(';')) t = t + ';';
+        lines[idx] = t;
         editor.value = lines.join('\n');
       } else {
         editor.value = '@startuml\n' + cleanCodeStyles(editor.value) + '\n@enduml';
@@ -1934,6 +1944,41 @@ Queue --> MS_Pay : Procesar cobro`
       }
     }
 
+    function getPayloadForRender(rawCode) {
+      let code = rawCode.trim();
+      if (!code) return { payload: '', injectedLines: 0 };
+
+      const themeSelect = document.getElementById('diagram-theme-select');
+      const themeKey = themeSelect ? themeSelect.value : 'oscuro';
+
+      // Si el usuario ya escribió sus propios estilos o !theme, o si eligió clásico simple, no inyectar
+      const hasCustomSkin = code.includes('!theme') || /skinparam\s+backgroundColor/i.test(code);
+
+      if (!hasCustomSkin && themeKey !== 'simple' && THEMES[themeKey]) {
+        const themeStr = THEMES[themeKey];
+        const themeLines = themeStr.split('\n').length + 1;
+
+        if (/^@startuml/i.test(code)) {
+          const match = code.match(/^@startuml[^\n]*\n?/i);
+          const prefix = match ? match[0] : '@startuml\n';
+          const rest = code.slice(prefix.length);
+          return {
+            payload: `${prefix}${themeStr}\n\n${rest}`,
+            injectedLines: themeLines
+          };
+        } else {
+          return {
+            payload: `@startuml\n${themeStr}\n\n${code}\n@enduml`,
+            injectedLines: themeLines
+          };
+        }
+      }
+
+      if (!/^@startuml/i.test(code)) {
+        code = `@startuml\n${code}\n@enduml`;
+      }
+      return { payload: code, injectedLines: 0 };
+    }
     async function render() {
       const code = editor.value.trim();
       if (!code) {
@@ -1948,19 +1993,20 @@ Queue --> MS_Pay : Procesar cobro`
         return;
       }
 
-      if (renderCache.has(code)) {
+      const themeSelect = document.getElementById('diagram-theme-select');
+      const themeKey = themeSelect ? themeSelect.value : 'oscuro';
+      const cacheKey = `${code}:::${themeKey}`;
+
+      const isDark = (themeKey === 'oscuro') || code.includes('#1E1E2E') || code.includes('dark');
+      previewBox.style.background = isDark ? '#1E1E2E' : '#FFFFFF';
+
+      if (renderCache.has(cacheKey)) {
         currentErrorDiagnosis = null;
-        const cachedSvg = renderCache.get(code);
+        const cachedSvg = renderCache.get(cacheKey);
         currentSvg = cachedSvg;
         activeErrorLines.clear();
         hideErrorAlerts();
         updateLineNumbers();
-
-        if (code.includes('#1E1E2E') || code.includes('dark')) {
-          previewBox.style.background = '#1E1E2E';
-        } else {
-          previewBox.style.background = '#FFFFFF';
-        }
 
         previewBox.innerHTML = cachedSvg;
         applyZoom();
@@ -1974,34 +2020,30 @@ Queue --> MS_Pay : Procesar cobro`
       }
       abortController = new AbortController();
 
+      const { payload, injectedLines } = getPayloadForRender(code);
+
       try {
         const res = await fetch('https://kroki.io/plantuml/svg', {
           method: 'POST',
           headers: { 'Content-Type': 'text/plain; charset=utf-8' },
-          body: code,
+          body: payload,
           signal: abortController.signal
         });
 
         if (!res.ok) {
           const errorMsg = await res.text();
-          const diagnosis = findExactCodeErrors(code, errorMsg);
+          const diagnosis = findExactCodeErrors(code, errorMsg, injectedLines);
           showDetailedError(diagnosis);
           return;
         }
 
         const svg = await res.text();
-        renderCache.set(code, svg);
+        renderCache.set(cacheKey, svg);
         currentSvg = svg;
         currentErrorDiagnosis = null;
         activeErrorLines.clear();
         hideErrorAlerts();
         updateLineNumbers();
-
-        if (code.includes('#1E1E2E') || code.includes('dark')) {
-          previewBox.style.background = '#1E1E2E';
-        } else {
-          previewBox.style.background = '#FFFFFF';
-        }
 
         previewBox.innerHTML = svg;
         applyZoom();
@@ -2009,7 +2051,7 @@ Queue --> MS_Pay : Procesar cobro`
         statusLeft.style.color = "#34d399";
       } catch (err) {
         if (err.name === 'AbortError') return;
-        const diagnosis = findExactCodeErrors(code, err.message || "Error");
+        const diagnosis = findExactCodeErrors(code, err.message || "Error", injectedLines);
         showDetailedError(diagnosis);
       }
     }
