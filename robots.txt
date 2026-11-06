@@ -59,6 +59,5 @@ User-agent: Offline Explorer
 User-agent: Teleport Pro
 Disallow: /
 
-# Mapas de sitio oficiales
+# Mapa de sitio oficial
 Sitemap: https://plantuml-studio-wheat.vercel.app/sitemap.xml
-Sitemap: https://gmph2007.github.io/plantuml-studio/sitemap.xml
