@@ -31,7 +31,20 @@
   <meta name="twitter:image" content="https://plantuml-studio-wheat.vercel.app/logo.png">
 
   <!-- Datos estructurados JSON-LD para Google Search -->
-      <!-- Rich Snippet FAQPage Schema para Google & Bing (#1 Ranking & Estrellas) -->
+        <!-- WebSite Schema con Logo Oficial para Google Search -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "PlantUML Studio",
+    "alternateName": ["PlantUML Studio IDE", "Editor PlantUML Online"],
+    "url": "https://plantuml-studio-wheat.vercel.app/",
+    "logo": "https://plantuml-studio-wheat.vercel.app/favicon-192x192.png",
+    "image": "https://plantuml-studio-wheat.vercel.app/logo.png"
+  }
+  </script>
+
+  <!-- Rich Snippet FAQPage Schema para Google & Bing (#1 Ranking & Estrellas) -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -111,6 +124,8 @@
     "name": "PlantUML Studio IDE",
     "alternateName": "PlantUML Online Real-Time Editor",
     "url": "https://plantuml-studio-wheat.vercel.app/",
+    "logo": "https://plantuml-studio-wheat.vercel.app/favicon-192x192.png",
+    "image": "https://plantuml-studio-wheat.vercel.app/logo.png",
     "description": "The best free real-time PlantUML editor and live compiler. Zero ads, high-resolution HD PNG clipboard copy, 1-click syntax error fixer, mobile-friendly touch interface.",
     "applicationCategory": "DeveloperApplication",
     "operatingSystem": "All",
@@ -140,7 +155,16 @@
   <link rel="alternate" hreflang="en" href="https://plantuml-studio-wheat.vercel.app/?lang=en">
   <link rel="alternate" hreflang="pt" href="https://plantuml-studio-wheat.vercel.app/?lang=pt">
   <link rel="alternate" hreflang="ja" href="https://plantuml-studio-wheat.vercel.app/?lang=ja">
-  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <!-- Favicon y Logo Oficiales para Google Search, Bing y Navegadores -->
+  <link rel="icon" href="/favicon.ico" sizes="48x48">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <meta name="msapplication-TileImage" content="https://plantuml-studio-wheat.vercel.app/favicon-192x192.png">
+  <meta name="msapplication-TileColor" content="#0b0f19">
+  <meta name="theme-color" content="#0b0f19">
   <style>
     :root {
       --bg: #0b0f19;
