@@ -4,13 +4,13 @@
   <link rel="preconnect" href="https://kroki.io" crossorigin>
   <link rel="dns-prefetch" href="https://kroki.io">
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
   <meta http-equiv="X-Content-Type-Options" content="nosniff">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta name="google-site-verification" content="syBTzdyZT37km2RILaoBCQx2jBG0T7k40uDdqked9l0">
   <meta name="msvalidate.01" content="plantuml-studio-bing-verification">
   <link rel="indexnow" href="https://plantuml-studio-wheat.vercel.app/e4d7a8c392f1465ea731b8c29013f412.txt">
-    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
   <meta name="description" content="PlantUML Studio IDE - Editor y compilador de PlantUML en tiempo real en español. Sin publicidad, exportación HD a portapapeles, autodiagnóstico de errores y 100% responsivo para móviles. Desarrollado por GMPH2007.">
   <meta name="keywords" content="PlantUML, PlantUML Studio, plantuml online editor, plantuml descargar gratis, plantuml para que sirve, plantuml diagramas de uml, editor plantuml online, editor plantuml en vivo, plantuml en español, plantuml gratis, diagramas uml online, gmph2007">
   <meta name="author" content="GMPH2007">
@@ -31,7 +31,6 @@
   <meta name="twitter:image" content="https://plantuml-studio-wheat.vercel.app/logo.png">
 
   <!-- Datos estructurados JSON-LD para Google Search -->
-        <!-- WebSite Schema con Logo Oficial para Google Search -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -44,7 +43,7 @@
   }
   </script>
 
-  <!-- Rich Snippet FAQPage Schema para Google & Bing (#1 Ranking & Estrellas) -->
+  <!-- Rich Snippet FAQPage Schema para Google & Bing -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -116,7 +115,7 @@
   }
   </script>
 
-  <!-- Datos estructurados JSON-LD con Valoraciones (Estrellas doradas en Google) -->
+  <!-- SoftwareApplication Schema -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -149,13 +148,15 @@
     }
   }
   </script>
-    <title>PlantUML Studio — Editor PlantUML Online en Vivo Gratis (0 Ads, HD)</title>
+
+  <title>PlantUML Studio — Editor PlantUML Online en Vivo Gratis (0 Ads, HD)</title>
   <link rel="alternate" hreflang="x-default" href="https://plantuml-studio-wheat.vercel.app/">
   <link rel="alternate" hreflang="es" href="https://plantuml-studio-wheat.vercel.app/?lang=es">
   <link rel="alternate" hreflang="en" href="https://plantuml-studio-wheat.vercel.app/?lang=en">
   <link rel="alternate" hreflang="pt" href="https://plantuml-studio-wheat.vercel.app/?lang=pt">
   <link rel="alternate" hreflang="ja" href="https://plantuml-studio-wheat.vercel.app/?lang=ja">
-    <!-- Favicon y Logo Oficiales para Google Search, Bing y Navegadores -->
+
+  <!-- Favicons oficiales -->
   <link rel="icon" href="/favicon.ico" sizes="48x48">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png">
@@ -165,6 +166,7 @@
   <meta name="msapplication-TileImage" content="https://plantuml-studio-wheat.vercel.app/favicon-192x192.png">
   <meta name="msapplication-TileColor" content="#0b0f19">
   <meta name="theme-color" content="#0b0f19">
+
   <style>
     :root {
       --bg: #0b0f19;
@@ -181,7 +183,8 @@
       --gutter-text: #64748b;
       --gutter-border: #1e293b;
       --error-line-bg: rgba(239, 68, 68, 0.35);
-      --canvas-bg: #ffffff;
+      --canvas-bg: #1e1e2e;
+      --toast-bg: #ef4444;
     }
 
     body.light-mode {
@@ -198,8 +201,9 @@
       --gutter-bg: #e2e8f0;
       --gutter-text: #64748b;
       --gutter-border: #cbd5e1;
-      --error-line-bg: rgba(239, 68, 68, 0.25);
+      --error-line-bg: rgba(239, 68, 68, 0.22);
       --canvas-bg: #ffffff;
+      --toast-bg: #dc2626;
     }
 
     * {
@@ -213,7 +217,7 @@
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
       background: var(--bg);
       color: var(--text);
-      padding: 12px 16px;
+      padding: 10px 14px 20px;
       line-height: 1.5;
       min-height: 100vh;
       display: flex;
@@ -221,8 +225,9 @@
       transition: background 0.2s, color 0.2s;
     }
 
+    /* HEADER MODERNO Y RESPONSIVO */
     header {
-      max-width: 1480px;
+      max-width: 1560px;
       width: 100%;
       margin: 0 auto 10px;
       display: flex;
@@ -237,15 +242,17 @@
     .brand-box {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
+      flex-shrink: 0;
     }
 
     .brand-box img {
-      width: 38px;
-      height: 38px;
+      width: 40px;
+      height: 40px;
       border-radius: 10px;
       object-fit: cover;
-      box-shadow: 0 0 12px rgba(59,130,246,0.35);
+      box-shadow: 0 0 14px rgba(59,130,246,0.4);
+      flex-shrink: 0;
     }
 
     .brand-box h1 {
@@ -253,21 +260,34 @@
       font-weight: 700;
       letter-spacing: -0.01em;
       white-space: nowrap;
+      margin: 0;
     }
 
-    
+    .brand-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .badges-row {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
     .badge-docente {
       background: rgba(59, 130, 246, 0.15);
       color: #93c5fd;
       border: 1px solid rgba(59, 130, 246, 0.4);
-      font-size: 0.78rem;
-      padding: 3px 10px;
+      font-size: 0.76rem;
+      padding: 3px 9px;
       border-radius: 999px;
       font-weight: 600;
       white-space: nowrap;
       display: inline-flex;
       align-items: center;
-      gap: 5px;
+      gap: 4px;
     }
     body.light-mode .badge-docente {
       background: #eff6ff;
@@ -278,25 +298,34 @@
     .badge-dev {
       background: linear-gradient(135deg, #1e3a8a, #3b82f6);
       color: #eff6ff;
-      font-size: 0.75rem;
-      padding: 3px 10px;
+      font-size: 0.74rem;
+      padding: 3px 9px;
       border-radius: 999px;
       font-weight: 700;
       border: 1px solid rgba(147, 197, 253, 0.4);
       white-space: nowrap;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .badge-dev:hover {
+      text-decoration: underline;
     }
 
     .live-status {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      font-size: 0.75rem;
-      font-weight: 600;
+      gap: 5px;
+      font-size: 0.72rem;
+      font-weight: 700;
       color: #34d399;
       background: rgba(16, 185, 129, 0.12);
       border: 1px solid rgba(16, 185, 129, 0.3);
-      padding: 3px 10px;
+      padding: 2px 8px;
       border-radius: 999px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
     }
 
     .pulse {
@@ -324,7 +353,7 @@
       font-family: inherit;
       font-size: 0.82rem;
       font-weight: 600;
-      padding: 7px 12px;
+      padding: 7px 11px;
       border-radius: 8px;
       border: 1px solid transparent;
       cursor: pointer;
@@ -334,6 +363,7 @@
       gap: 5px;
       touch-action: manipulation;
       transition: all 0.15s ease-in-out;
+      user-select: none;
     }
 
     .btn-secondary {
@@ -361,7 +391,10 @@
       background: #dc2626;
       color: white;
     }
-    
+    .btn-danger:hover {
+      background: #b91c1c;
+    }
+
     .btn-github {
       background: #24292f;
       color: #ffffff !important;
@@ -370,8 +403,8 @@
       font-weight: 700;
       display: inline-flex;
       align-items: center;
-      gap: 7px;
-      padding: 7px 12px;
+      gap: 6px;
+      padding: 7px 11px;
       border-radius: 8px;
       font-size: 0.82rem;
       box-shadow: 0 2px 8px rgba(0,0,0,0.25);
@@ -381,15 +414,23 @@
       background: #0f1419;
       border-color: #38bdf8;
       transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(56, 189, 248, 0.25);
     }
     body.light-mode .btn-github {
       background: #0f172a;
       color: #ffffff !important;
     }
 
-    .btn-danger:hover {
-      background: #b91c1c;
+    .btn-share {
+      background: linear-gradient(135deg, #8b5cf6, #6366f1);
+      color: white !important;
+      font-weight: 700;
+      border: none;
+      box-shadow: 0 2px 10px rgba(139, 92, 246, 0.4);
+      transition: all 0.2s;
+    }
+    .btn-share:hover {
+      background: linear-gradient(135deg, #7c3aed, #4f46e5);
+      transform: translateY(-1px);
     }
 
     .btn-primary {
@@ -400,24 +441,28 @@
       background: var(--primary-hover);
     }
 
-    /* PESTAÑAS MÓVILES (CELULAR) */
+    /* BARRA DE PESTAÑAS MÓVILES */
     .mobile-nav {
       display: none;
-      max-width: 1480px;
+      max-width: 1560px;
       width: 100%;
       margin: 0 auto 10px;
       background: var(--card-bg);
       border: 1px solid var(--card-border);
       border-radius: 12px;
       padding: 4px;
-      gap: 4px;
+      gap: 5px;
       box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 6px;
+      z-index: 100;
+      backdrop-filter: blur(8px);
     }
 
     .tab-btn {
       flex: 1;
-      padding: 9px 8px;
-      font-size: 0.85rem;
+      padding: 10px 8px;
+      font-size: 0.84rem;
       font-weight: 700;
       border-radius: 8px;
       border: none;
@@ -435,7 +480,7 @@
     .tab-btn.active {
       background: var(--primary);
       color: white;
-      box-shadow: 0 2px 8px rgba(37, 99, 235, 0.4);
+      box-shadow: 0 2px 8px rgba(37, 99, 235, 0.45);
     }
 
     .tab-badge-err {
@@ -446,17 +491,19 @@
       padding: 1px 6px;
       border-radius: 999px;
       font-weight: 800;
+      animation: pulse-dot 1.2s infinite;
     }
 
+    /* ESPACIO DE TRABAJO PRINCIPAL */
     .workspace {
-      max-width: 1480px;
+      max-width: 1560px;
       width: 100%;
       margin: 0 auto;
       flex: 1;
       display: grid;
-      grid-template-columns: 1.05fr 1.25fr;
+      grid-template-columns: 1.05fr 1.22fr;
       gap: 14px;
-      align-items: start;
+      align-items: stretch;
     }
 
     .panel {
@@ -467,6 +514,7 @@
       display: flex;
       flex-direction: column;
       box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      min-height: 0;
     }
 
     .panel-header {
@@ -482,27 +530,31 @@
       flex-wrap: wrap;
     }
 
+    /* BARRA DESLIZANTE DE SNIPPETS */
     .snippets-bar {
       background: var(--gutter-bg);
       border-bottom: 1px solid var(--card-border);
-      padding: 8px 12px;
+      padding: 7px 10px;
       display: flex;
       gap: 6px;
       overflow-x: auto;
       align-items: center;
       white-space: nowrap;
       -webkit-overflow-scrolling: touch;
-      scrollbar-width: thin;
+      scrollbar-width: none;
+    }
+    .snippets-bar::-webkit-scrollbar {
+      display: none;
     }
 
     .snippet-chip {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
       color: var(--text);
-      font-size: 0.78rem;
+      font-size: 0.76rem;
       font-weight: 600;
-      padding: 6px 10px;
-      border-radius: 8px;
+      padding: 5px 9px;
+      border-radius: 7px;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
@@ -519,10 +571,12 @@
       transform: translateY(-1px);
     }
 
+    /* CONTENEDOR DEL EDITOR Y GUTTER */
     .editor-container {
       position: relative;
       display: flex;
-      height: 560px;
+      flex: 1;
+      min-height: 540px;
       background: var(--code-bg);
       overflow: hidden;
     }
@@ -532,10 +586,10 @@
       background: var(--gutter-bg);
       border-right: 1px solid var(--gutter-border);
       color: var(--gutter-text);
-      font-family: "Cascadia Code", Consolas, monospace;
+      font-family: "Cascadia Code", "Fira Code", Consolas, monospace;
       font-size: 14px;
       line-height: 22px;
-      padding: 12px 4px;
+      padding: 12px 4px 12px 2px;
       text-align: right;
       user-select: none;
       overflow: hidden;
@@ -546,14 +600,17 @@
     .gutter-num {
       display: block;
       height: 22px;
-      padding-right: 4px;
-      border-radius: 3px;
+      padding-right: 5px;
+      border-radius: 4px;
+      transition: background 0.15s;
     }
 
     .gutter-num.error-active {
       background: #ef4444 !important;
       color: #ffffff !important;
-      font-weight: bold;
+      font-weight: 800;
+      box-shadow: 0 0 8px rgba(239, 68, 68, 0.8);
+      cursor: pointer;
     }
 
     textarea#editor {
@@ -562,7 +619,7 @@
       background: transparent;
       color: var(--editor-text);
       border: none;
-      padding: 12px 10px;
+      padding: 12px 12px;
       font-family: "Cascadia Code", "Fira Code", Consolas, monospace;
       font-size: 15px;
       line-height: 22px;
@@ -572,10 +629,13 @@
       overflow: auto;
       tab-size: 4;
       -webkit-overflow-scrolling: touch;
+      word-wrap: normal;
     }
 
+    /* LIENZO DE PREVIEW */
     .preview-canvas {
-      height: 600px;
+      flex: 1;
+      min-height: 540px;
       background: var(--canvas-bg);
       border-radius: 0 0 12px 12px;
       display: flex;
@@ -593,9 +653,9 @@
       height: auto !important;
       display: block;
       margin: 0 auto;
-      transition: transform 0.2s ease-out;
+      transition: transform 0.18s ease-out;
       transform-origin: center center;
-      filter: drop-shadow(0 4px 10px rgba(0,0,0,0.06));
+      filter: drop-shadow(0 4px 12px rgba(0,0,0,0.08));
     }
 
     .panel-footer {
@@ -607,15 +667,17 @@
       align-items: center;
       font-size: 0.82rem;
       color: var(--subtext);
+      flex-wrap: wrap;
+      gap: 8px;
     }
 
-    /* BARRA DE ZOOM PARA EL DIAGRAMA */
+    /* BARRA DE ZOOM */
     .zoom-toolbar {
       display: inline-flex;
       align-items: center;
       background: var(--code-bg);
       border: 1px solid var(--card-border);
-      border-radius: 6px;
+      border-radius: 7px;
       overflow: hidden;
     }
 
@@ -623,7 +685,7 @@
       background: transparent;
       border: none;
       color: var(--text);
-      padding: 4px 8px;
+      padding: 5px 9px;
       font-size: 0.8rem;
       font-weight: 700;
       cursor: pointer;
@@ -634,36 +696,81 @@
     }
 
     .zoom-label {
-      font-size: 0.75rem;
+      font-size: 0.74rem;
       padding: 0 6px;
       color: var(--subtext);
       font-weight: 600;
+      min-width: 44px;
+      text-align: center;
     }
 
-    /* ALERTA FLOTANTE EN EDITOR MÓVIL */
+    /* AVISO DE ERROR FLOTANTE EN EDITOR */
     .mobile-error-toast {
       display: none;
-      background: #ef4444;
+      background: var(--toast-bg);
       color: white;
-      padding: 8px 12px;
-      font-size: 0.82rem;
+      padding: 9px 14px;
+      font-size: 0.83rem;
       font-weight: 600;
       justify-content: space-between;
       align-items: center;
       cursor: pointer;
-      box-shadow: 0 2px 8px rgba(239, 68, 68, 0.4);
+      box-shadow: 0 2px 10px rgba(239, 68, 68, 0.45);
+      border-bottom: 1px solid rgba(255,255,255,0.2);
+    }
+    .mobile-error-toast:hover {
+      opacity: 0.95;
     }
 
+    /* BOTONES FLOTANTES DE ACCIÓN MÓVIL (FAB) */
+    .fab-switch {
+      display: none;
+      position: fixed;
+      bottom: 18px;
+      right: 18px;
+      z-index: 150;
+      padding: 12px 18px;
+      border-radius: 999px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.35);
+      align-items: center;
+      gap: 7px;
+      cursor: pointer;
+      border: 1px solid rgba(255,255,255,0.25);
+      backdrop-filter: blur(8px);
+    }
+    .fab-switch.fab-preview {
+      background: linear-gradient(135deg, #2563eb, #3b82f6);
+      color: white;
+    }
+    .fab-switch.fab-error {
+      background: linear-gradient(135deg, #dc2626, #ef4444);
+      color: white;
+      animation: pulse-dot 1.4s infinite;
+    }
+    .fab-switch.fab-editor {
+      background: linear-gradient(135deg, #059669, #10b981);
+      color: white;
+    }
+
+    /* TARJETA DE ERROR PEDAGÓGICA Y ASISTIDA */
     .error-card {
       background: #ffffff;
       border: 2px solid #ef4444;
       border-radius: 12px;
-      padding: 18px;
-      max-width: 580px;
+      padding: 18px 20px;
+      max-width: 620px;
       width: 100%;
       text-align: left;
-      box-shadow: 0 10px 25px rgba(239, 68, 68, 0.18);
+      box-shadow: 0 12px 30px rgba(239, 68, 68, 0.2);
       color: #0f172a;
+      animation: fadeIn 0.2s ease-in;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     .error-title-row {
@@ -673,6 +780,8 @@
       margin-bottom: 12px;
       border-bottom: 1px solid #fee2e2;
       padding-bottom: 8px;
+      flex-wrap: wrap;
+      gap: 6px;
     }
 
     .error-badge {
@@ -680,145 +789,179 @@
       color: #dc2626;
       font-weight: 800;
       font-size: 0.82rem;
-      padding: 3px 8px;
+      padding: 3px 10px;
       border-radius: 6px;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
     }
 
     .error-lines-badge {
       background: #ef4444;
       color: white;
       font-size: 0.8rem;
-      padding: 3px 8px;
+      padding: 3px 10px;
       border-radius: 6px;
       font-weight: 700;
     }
 
     .error-label {
-      font-size: 0.78rem;
+      font-size: 0.76rem;
       text-transform: uppercase;
-      font-weight: 700;
+      font-weight: 800;
       color: #475569;
       margin-top: 10px;
       margin-bottom: 4px;
+      letter-spacing: 0.04em;
     }
 
     .error-text {
       font-size: 0.9rem;
       color: #1e293b;
-      line-height: 1.45;
+      line-height: 1.5;
       background: #f8fafc;
-      padding: 10px 12px;
+      padding: 10px 14px;
       border-radius: 8px;
       border-left: 4px solid #ef4444;
       margin-bottom: 8px;
     }
 
     .error-code-box {
-      font-family: "Cascadia Code", Consolas, monospace;
+      font-family: "Cascadia Code", "Fira Code", Consolas, monospace;
       font-size: 0.85rem;
       background: #0f172a;
       color: #fca5a5;
-      padding: 10px 12px;
+      padding: 10px 14px;
       border-radius: 8px;
       margin: 6px 0 10px 0;
       white-space: pre-wrap;
       border: 1px solid #7f1d1d;
+      line-height: 1.45;
+    }
+
+    .error-actions-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 14px;
+      flex-wrap: wrap;
     }
 
     .btn-fix {
-      margin-top: 12px;
-      width: 100%;
+      flex: 1;
       background: #16a34a;
       color: #ffffff;
       border: none;
-      padding: 12px 16px;
+      padding: 11px 16px;
       border-radius: 8px;
-      font-size: 0.92rem;
+      font-size: 0.9rem;
       font-weight: 700;
       cursor: pointer;
       display: flex;
       justify-content: center;
       align-items: center;
-      gap: 8px;
-      box-shadow: 0 4px 12px rgba(22, 163, 74, 0.3);
+      gap: 7px;
+      box-shadow: 0 4px 12px rgba(22, 163, 74, 0.35);
       transition: background 0.15s;
     }
-
     .btn-fix:hover {
       background: #15803d;
     }
 
-    /* === RESPONSIVE PARA CELULARES Y TABLETS === */
-    @media (max-width: 820px) {
+    .btn-goto-line {
+      background: #0284c7;
+      color: white;
+      border: none;
+      padding: 11px 14px;
+      border-radius: 8px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn-goto-line:hover {
+      background: #0369a1;
+    }
+
+    /* DIVIDER EN VISTA DIVIDIDA MÓVIL */
+    .mobile-split-divider {
+      display: none;
+      background: var(--gutter-bg);
+      border-top: 1px solid var(--card-border);
+      border-bottom: 1px solid var(--card-border);
+      padding: 6px 12px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--subtext);
+      text-align: center;
+      user-select: none;
+    }
+
+    /* === RESPONSIVO AVANZADO PARA CELULARES Y TABLETS === */
+    @media (max-width: 860px) {
       body {
-        padding: 8px 8px 14px 8px;
+        padding: 6px 8px 24px;
       }
 
       header {
-        margin-bottom: 8px;
+        margin-bottom: 6px;
         padding-bottom: 8px;
         gap: 8px;
       }
 
       .brand-box img {
-        width: 32px;
-        height: 32px;
+        width: 34px;
+        height: 34px;
       }
 
       .brand-box h1 {
-        font-size: 1.12rem;
+        font-size: 1.15rem;
       }
 
-      
-    .badge-docente {
-      background: rgba(59, 130, 246, 0.15);
-      color: #93c5fd;
-      border: 1px solid rgba(59, 130, 246, 0.4);
-      font-size: 0.78rem;
-      padding: 3px 10px;
-      border-radius: 999px;
-      font-weight: 600;
-      white-space: nowrap;
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-    }
-    body.light-mode .badge-docente {
-      background: #eff6ff;
-      color: #1e40af;
-      border-color: #93c5fd;
-    }
+      .badges-row {
+        gap: 4px;
+      }
 
-    .badge-dev {
+      .badge-docente {
+        font-size: 0.72rem;
+        padding: 2px 7px;
+      }
+
+      .badge-dev {
         font-size: 0.7rem;
         padding: 2px 7px;
       }
 
       .live-status {
-        display: none; /* Ahorra espacio en pantallas pequeñas */
+        font-size: 0.68rem;
+        padding: 2px 6px;
       }
 
       .top-tools {
         width: 100%;
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
+        display: flex;
+        overflow-x: auto;
+        padding-bottom: 2px;
         gap: 4px;
+        scrollbar-width: none;
+      }
+      .top-tools::-webkit-scrollbar {
+        display: none;
       }
 
-      .top-tools button {
-        padding: 7px 4px;
-        font-size: 0.74rem;
+      .top-tools button,
+      .top-tools a,
+      .top-tools select {
+        padding: 7px 9px;
+        font-size: 0.76rem;
         white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
+        flex-shrink: 0;
       }
 
-      /* MOSTRAR PESTAÑAS MÓVILES */
+      /* MOSTRAR NAVEGACIÓN MÓVIL */
       .mobile-nav {
         display: flex;
-        position: sticky;
-        top: 0;
-        z-index: 50;
       }
 
       .workspace {
@@ -827,25 +970,21 @@
       }
 
       .editor-container {
-        height: 52vh;
-        min-height: 320px;
+        min-height: 340px;
+        height: calc(100vh - 240px);
       }
 
       textarea#editor {
-        font-size: 16px; /* Evita zoom automático en iPhone */
+        font-size: 16px; /* Evita auto-zoom molesto en iOS */
       }
 
       .preview-canvas {
-        height: 60vh;
-        min-height: 360px;
-        padding: 8px;
+        min-height: 340px;
+        height: calc(100vh - 240px);
+        padding: 10px;
       }
 
-      .preview-canvas svg {
-        max-width: 100% !important;
-      }
-
-      /* MODO PESTAÑA MÓVIL */
+      /* VISTA EDITOR SOLA EN CELULAR */
       .workspace.view-editor #panel-preview {
         display: none !important;
       }
@@ -853,6 +992,7 @@
         display: flex !important;
       }
 
+      /* VISTA DIAGRAMA SOLA EN CELULAR */
       .workspace.view-preview #panel-editor {
         display: none !important;
       }
@@ -860,33 +1000,33 @@
         display: flex !important;
       }
 
-      .workspace.view-both #panel-editor,
+      /* VISTA DIVIDIDA EN CELULAR */
+      .workspace.view-both #panel-editor {
+        display: flex !important;
+      }
+      .workspace.view-both #panel-editor .editor-container {
+        height: 42vh;
+        min-height: 250px;
+      }
       .workspace.view-both #panel-preview {
         display: flex !important;
+      }
+      .workspace.view-both #panel-preview .preview-canvas {
+        height: 44vh;
+        min-height: 250px;
+      }
+      .workspace.view-both .mobile-split-divider {
+        display: block;
+      }
+
+      /* MOSTRAR BOTÓN FLOTANTE (FAB) */
+      .fab-switch {
+        display: inline-flex;
       }
 
       .panel-header {
         padding: 8px 10px;
       }
-
-      .panel-header > div {
-        flex-wrap: wrap;
-      }
-    }
-  
-    /* BOTON VIRAL COMPARTIR */
-    .btn-share {
-      background: linear-gradient(135deg, #8b5cf6, #6366f1);
-      color: white !important;
-      font-weight: 700;
-      border: none;
-      box-shadow: 0 2px 10px rgba(139, 92, 246, 0.4);
-      transition: all 0.2s;
-    }
-    .btn-share:hover {
-      background: linear-gradient(135deg, #7c3aed, #4f46e5);
-      transform: translateY(-1px);
-      box-shadow: 0 4px 14px rgba(139, 92, 246, 0.5);
     }
 
     /* MODAL DE COMPARTIR VIRAL */
@@ -956,9 +1096,9 @@
     .bg-in { background: #0A66C2; }
     .bg-tg { background: #229ED9; }
 
-    /* SECCION SEO COLLAPSIBLE INFORMATIVA */
+    /* SECCION SEO INFORMATIVA */
     .seo-info-container {
-      max-width: 1480px;
+      max-width: 1560px;
       width: 100%;
       margin: 24px auto 10px;
       background: var(--card-bg);
@@ -985,8 +1125,18 @@
       gap: 12px;
       margin: 14px 0;
     }
-    
-    /* FAQ ACCORDION INTERACTIVO PARA SEO #1 */
+    .seo-feat-card {
+      background: var(--code-bg);
+      border: 1px solid var(--card-border);
+      padding: 12px 14px;
+      border-radius: 8px;
+    }
+    .seo-feat-card strong {
+      color: var(--text);
+      display: block;
+      margin-bottom: 4px;
+    }
+
     .seo-faq-section {
       margin-top: 22px;
       border-top: 1px solid var(--card-border);
@@ -1015,9 +1165,6 @@
       align-items: center;
       justify-content: space-between;
     }
-    .seo-faq-question:hover {
-      color: #89b4fa;
-    }
     .seo-faq-answer {
       margin-top: 10px;
       font-size: 0.88rem;
@@ -1034,44 +1181,34 @@
     .seo-faq-answer li {
       margin-bottom: 5px;
     }
-
-    .seo-feat-card {
-      background: var(--code-bg);
-      border: 1px solid var(--card-border);
-      padding: 12px 14px;
-      border-radius: 8px;
-    }
-    .seo-feat-card strong {
-      color: var(--text);
-      display: block;
-      margin-bottom: 4px;
-    }
-
   </style>
 </head>
 <body>
 
-    <header>
+  <!-- HEADER OFICIAL DE PLANTUML STUDIO -->
+  <header>
     <div class="brand-box">
       <img src="logo.png" alt="Logo PlantUML">
-      <div>
-        <div style="display: flex; align-items: center; gap: 8px;">
-          <h1 style="margin: 0; font-size: 1.35rem;">PlantUML Studio</h1>
+      <div class="brand-meta">
+        <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+          <h1>PlantUML Studio</h1>
           <span class="live-status"><span class="pulse"></span> En vivo</span>
         </div>
-        <div style="display: flex; gap: 6px; align-items: center; margin-top: 3px; flex-wrap: wrap;">
+        <div class="badges-row">
           <span class="badge-docente">👨‍🏫 Docente: Ing. Javier Eduardo Jaramillo Atoche</span>
-          </div>
+          <a href="https://github.com/GMPH2007" target="_blank" class="badge-dev">💻 GMPH2007</a>
+        </div>
       </div>
     </div>
+
     <div class="top-tools">
-      <select id="lang-select" onchange="changeLanguage(this.value)" style="background: var(--card-bg); color: var(--text); border: 1px solid var(--card-border); padding: 6px 8px; border-radius: 8px; font-size: 0.82rem; font-weight: 700; cursor: pointer; outline: none;">
+      <select id="lang-select" onchange="changeLanguage(this.value)" style="background: var(--card-bg); color: var(--text); border: 1px solid var(--card-border); padding: 7px 9px; border-radius: 8px; font-size: 0.8rem; font-weight: 700; cursor: pointer; outline: none;">
         <option value="es" selected>🇪🇸 ES</option>
         <option value="en">🇺🇸 EN</option>
         <option value="pt">🇧🇷 PT</option>
         <option value="ja">🇯🇵 日本語</option>
       </select>
-      <button class="btn-share" onclick="openShareModal()" title="Compartir diagrama viralmente con 1 clic">
+      <button class="btn-share" onclick="openShareModal()" title="Compartir diagrama con enlace viral">
         🚀 <span id="txt-btn-share">Compartir</span>
       </button>
       <a href="https://github.com/GMPH2007/plantuml-studio" target="_blank" class="btn-github" title="Abrir Repositorio Oficial en GitHub">
@@ -1087,7 +1224,7 @@
     </div>
   </header>
 
-  <!-- NAVEGACIÓN MÓVIL (PESTAÑAS PARA CELULARES) -->
+  <!-- NAVEGACIÓN MÓVIL POR PESTAÑAS (CELULARES Y TABLETS) -->
   <div class="mobile-nav">
     <button class="tab-btn active" id="tab-editor" onclick="setMobileView('editor')">
       ✏️ Editor Código
@@ -1100,14 +1237,17 @@
     </button>
   </div>
 
+  <!-- WORKSPACE PRINCIPAL -->
   <div class="workspace view-editor" id="workspace">
-    <!-- PANEL DE CÓDIGO -->
+
+    <!-- PANEL DEL EDITOR DE CÓDIGO -->
     <div class="panel" id="panel-editor">
       <div class="panel-header">
-        <span>✏️ Editor PlantUML</span>
-        <div style="display: flex; gap: 6px; align-items: center;">
+        <span id="title-editor-lbl">✏️ Editor PlantUML</span>
+        <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
           <select id="template-select" onchange="loadSelectedTemplate(this.value)" style="background: var(--code-bg); color: var(--text); border: 1px solid var(--card-border); padding: 5px 8px; border-radius: 6px; font-size: 0.8rem; outline: none; cursor: pointer; font-weight: 600;">
             <option value="" selected>📚 Plantillas...</option>
+            <option value="ac_system">❄️ Arquitectura: Aire Acondicionado</option>
             <option value="auth_jwt">🔐 Secuencia: Login y JWT</option>
             <option value="ecommerce_class">🏛️ Clases: Tienda Online</option>
             <option value="bank_usecase">⭕ Casos de Uso: Banco</option>
@@ -1122,24 +1262,28 @@
         </div>
       </div>
 
-      <!-- SNIPPETS RÁPIDOS CON SCROLL TÁCTIL PARA CELULAR -->
+      <!-- SNIPPETS RÁPIDOS CON SCROLL TÁCTIL SUAVE -->
       <div class="snippets-bar">
         <span class="snippet-chip" onclick="insertSnippet('actor')">👤 Actor</span>
         <span class="snippet-chip" onclick="insertSnippet('participant')">📦 Participante</span>
+        <span class="snippet-chip" onclick="insertSnippet('rectangle')">🔲 Rectángulo</span>
         <span class="snippet-chip" onclick="insertSnippet('database')">🗄️ Base de Datos</span>
         <span class="snippet-chip" onclick="insertSnippet('arrow')">➡️ Flecha (A -> B)</span>
-        <span class="snippet-chip" onclick="insertSnippet('alt')">🔀 Condicional (alt/else)</span>
+        <span class="snippet-chip" onclick="insertSnippet('alt')">🔀 Condicional (alt)</span>
+        <span class="snippet-chip" onclick="insertSnippet('loop')">🔁 Bucle (loop)</span>
         <span class="snippet-chip" onclick="insertSnippet('note')">📝 Nota</span>
         <span class="snippet-chip" onclick="insertSnippet('class')">🏛️ Clase</span>
+        <span class="snippet-chip" onclick="insertSnippet('activity')">🏁 Inicio/Fin</span>
+        <span class="snippet-chip" onclick="insertSnippet('activate')">⚡ Activar</span>
       </div>
 
-      <!-- AVISO DE ERROR FLOTANTE PARA CELULAR EN MODO EDITOR -->
+      <!-- AVISO DE ERROR FLOTANTE EN MODO EDITOR MÓVIL -->
       <div class="mobile-error-toast" id="mobile-error-toast" onclick="setMobileView('preview')">
         <span id="mobile-toast-text">⚠️ Error de sintaxis detectado</span>
-        <span style="text-decoration: underline; font-size: 0.75rem;">Toca para corregir &gt;</span>
+        <span style="text-decoration: underline; font-size: 0.78rem;">Toca para corregir &gt;</span>
       </div>
 
-      <!-- EDITOR CON NÚMEROS DE LÍNEA -->
+      <!-- ÁREA DE EDICIÓN CON GUTTER NUMERADO -->
       <div class="editor-container">
         <div class="gutter" id="gutter"></div>
         <textarea id="editor" spellcheck="false" placeholder="Escribe o pega aquí tu código PlantUML..."></textarea>
@@ -1148,23 +1292,29 @@
       <div class="panel-footer">
         <span id="status-left" style="color: #34d399; font-weight: 600;">⚡ Sincronizado</span>
         <div style="display: flex; gap: 8px; align-items: center;">
-          <span id="counter">0 car.</span>
+          <span id="counter">0 car. • 0 lín.</span>
           <button class="btn-primary" style="padding: 3px 8px; font-size: 0.72rem; display: none;" id="btn-quick-preview" onclick="setMobileView('preview')">👁️ Ver</button>
         </div>
       </div>
     </div>
 
-    <!-- PANEL DEL DIAGRAMA -->
+    <!-- SEPARADOR VISUAL PARA MODO DIVIDIDO EN MÓVILES -->
+    <div class="mobile-split-divider">
+      ▼ RESULTADO DEL DIAGRAMA EN VIVO ▼
+    </div>
+
+    <!-- PANEL DEL DIAGRAMA EN VIVO -->
     <div class="panel" id="panel-preview">
       <div class="panel-header">
         <div style="display: flex; gap: 8px; align-items: center;">
-          <span>👁️ Diagrama en Vivo</span>
+          <span id="title-preview-lbl">👁️ Diagrama en Vivo</span>
           <!-- CONTROLES DE ZOOM -->
           <div class="zoom-toolbar">
             <button class="zoom-btn" onclick="adjustZoom(-0.15)" title="Reducir">-</button>
             <span class="zoom-label" id="zoom-label">100%</span>
             <button class="zoom-btn" onclick="adjustZoom(0.15)" title="Aumentar">+</button>
-            <button class="zoom-btn" onclick="resetZoom()" title="Resetear Zoom" style="border-left: 1px solid var(--card-border); font-size: 0.7rem;">100%</button>
+            <button class="zoom-btn" onclick="resetZoom()" title="Reset a 100%" style="border-left: 1px solid var(--card-border); font-size: 0.7rem;">100%</button>
+            <button class="zoom-btn" onclick="fitToScreen()" title="Ajustar al ancho" style="border-left: 1px solid var(--card-border); font-size: 0.7rem;">⊡</button>
           </div>
         </div>
         <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
@@ -1177,7 +1327,7 @@
       </div>
 
       <div class="preview-canvas" id="preview-box">
-        <!-- SVG o Tarjeta de Error -->
+        <!-- SVG o Tarjeta de Error Asistida -->
       </div>
 
       <div class="panel-footer" style="flex-wrap: wrap; gap: 8px;">
@@ -1189,20 +1339,26 @@
     </div>
   </div>
 
+  <!-- BOTONES FLOTANTES DE ACCIÓN MÓVIL (FAB) -->
+  <button class="fab-switch fab-preview" id="fab-preview-btn" onclick="setMobileView('preview')">
+    👁️ Ver Diagrama
+  </button>
+  <button class="fab-switch fab-editor" id="fab-editor-btn" onclick="setMobileView('editor')" style="display: none;">
+    ✏️ Editar Código
+  </button>
+
   <script>
     /**
      * PlantUML Studio IDE
      * Copyright (c) 2026 GMPH2007 (https://github.com/GMPH2007/plantuml-studio)
      * Docente: Ing. Javier Eduardo Jaramillo Atoche
-     * Protegido contra clonación no autorizada.
      */
-    // PROTECCIÓN ANTI-ROBO (FRAME-BUSTER): Impide que otras webs roben e incrusten tu app
     if (window.top !== window.self) {
       try {
         window.top.location = window.self.location;
       } catch (e) {
         document.addEventListener("DOMContentLoaded", () => {
-          document.body.innerHTML = '<div style="padding:50px;text-align:center;font-family:sans-serif;background:#0b0f19;color:#fff;"><h2>PlantUML Studio IDE</h2><p>Esta aplicación fue creada por GMPH2007. Para usarla de forma oficial y segura, ingresa a:</p><a href="https://plantuml-studio-wheat.vercel.app" target="_blank" style="color:#38bdf8;font-size:18px;font-weight:bold;">plantuml-studio-wheat.vercel.app</a></div>';
+          document.body.innerHTML = '<div style="padding:50px;text-align:center;font-family:sans-serif;background:#0b0f19;color:#fff;"><h2>PlantUML Studio IDE</h2><p>Aplicación oficial de GMPH2007:</p><a href="https://plantuml-studio-wheat.vercel.app" target="_blank" style="color:#38bdf8;font-size:18px;font-weight:bold;">plantuml-studio-wheat.vercel.app</a></div>';
         });
       }
     }
@@ -1218,6 +1374,8 @@
     const mobileToastText = document.getElementById('mobile-toast-text');
     const tabBadgeErr = document.getElementById('tab-badge-err');
     const zoomLabel = document.getElementById('zoom-label');
+    const fabPreviewBtn = document.getElementById('fab-preview-btn');
+    const fabEditorBtn = document.getElementById('fab-editor-btn');
 
     let debounce = null;
     let currentSvg = "";
@@ -1226,29 +1384,70 @@
     let abortController = null;
     let currentErrorDiagnosis = null;
     let currentZoom = 1.0;
+    let currentMobileView = 'editor';
 
-    // CONTROLADOR DE PESTAÑAS MÓVILES (CELULAR)
+    // NORMALIZACIÓN INTELIGENTE DE CARACTERES
+    // Convierte comillas tipográficas, flechas Unicode y espacios no separables
+    function normalizeCodeInput(text) {
+      return text
+        .replace(/[\u201C\u201D\u201E\u201F\u00AB\u00BB]/g, '"')
+        .replace(/[\u2018\u2019\u201A\u201B]/g, "'")
+        .replace(/\u2192/g, '->')
+        .replace(/\u2190/g, '<-')
+        .replace(/\u21D2/g, '->')
+        .replace(/\u2194/g, '<->')
+        .replace(/\u00A0/g, ' ')
+        .replace(/[\u2014\u2013]/g, '-');
+    }
+
+    // CONTROLADOR DE PESTAÑAS MÓVILES (CELULAR / TABLET)
     function setMobileView(view) {
+      currentMobileView = view;
       workspace.className = 'workspace view-' + view;
       document.getElementById('tab-editor').classList.toggle('active', view === 'editor');
       document.getElementById('tab-preview').classList.toggle('active', view === 'preview');
       document.getElementById('tab-both').classList.toggle('active', view === 'both');
 
-      // Scroll arriba al cambiar de pestaña en celular
-      if (window.innerWidth <= 820) {
+      // Actualizar visibilidad de botones flotantes FAB
+      if (window.innerWidth <= 860) {
+        if (view === 'editor') {
+          fabPreviewBtn.style.display = 'inline-flex';
+          fabEditorBtn.style.display = 'none';
+        } else if (view === 'preview') {
+          fabPreviewBtn.style.display = 'none';
+          fabEditorBtn.style.display = 'inline-flex';
+        } else {
+          fabPreviewBtn.style.display = 'none';
+          fabEditorBtn.style.display = 'none';
+        }
         window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        fabPreviewBtn.style.display = 'none';
+        fabEditorBtn.style.display = 'none';
       }
     }
 
-    // CONTROLES DE ZOOM PARA CELULARES Y COMPUTADORAS
+    // ZOOM Y AJUSTE DEL DIAGRAMA
     function adjustZoom(delta) {
-      currentZoom = Math.min(Math.max(currentZoom + delta, 0.4), 3.0);
+      currentZoom = Math.min(Math.max(currentZoom + delta, 0.35), 3.0);
       applyZoom();
     }
 
     function resetZoom() {
       currentZoom = 1.0;
       applyZoom();
+    }
+
+    function fitToScreen() {
+      const svg = previewBox.querySelector('svg');
+      if (!svg) return;
+      const cWidth = previewBox.clientWidth - 32;
+      const svgWidth = svg.viewBox?.baseVal?.width || svg.clientWidth || 600;
+      if (svgWidth > 0 && cWidth > 0) {
+        const optimal = Math.min(Math.max(cWidth / svgWidth, 0.4), 1.8);
+        currentZoom = Math.round(optimal * 100) / 100;
+        applyZoom();
+      }
     }
 
     function applyZoom() {
@@ -1258,7 +1457,8 @@
       }
       const pct = Math.round(currentZoom * 100);
       zoomLabel.textContent = pct + '%';
-      document.getElementById('status-scale').textContent = `Escala: ${pct}%`;
+      const statusScale = document.getElementById('status-scale');
+      if (statusScale) statusScale.textContent = `Escala: ${pct}%`;
     }
 
     function toggleInterfaceTheme() {
@@ -1268,16 +1468,33 @@
       render();
     }
 
+    // NUMERACIÓN DE LÍNEAS EN GUTTER
     function updateLineNumbers() {
       const lines = editor.value.split('\n');
       const count = lines.length;
       let gutterHtml = '';
       for (let i = 1; i <= count; i++) {
         const isErr = activeErrorLines.has(i);
-        gutterHtml += `<span class="gutter-num ${isErr ? 'error-active' : ''}">${i}</span>`;
+        gutterHtml += `<span class="gutter-num ${isErr ? 'error-active' : ''}" onclick="goToLine(${i})">${i}</span>`;
       }
       gutter.innerHTML = gutterHtml;
       counter.textContent = `${editor.value.length} car. • ${count} lín.`;
+    }
+
+    function goToLine(lineNum) {
+      const lines = editor.value.split('\n');
+      let charIndex = 0;
+      for (let i = 0; i < lineNum - 1 && i < lines.length; i++) {
+        charIndex += lines[i].length + 1;
+      }
+      editor.focus();
+      editor.setSelectionRange(charIndex, charIndex + (lines[lineNum - 1] ? lines[lineNum - 1].length : 0));
+      const lineHeight = 22;
+      editor.scrollTop = Math.max(0, (lineNum - 3) * lineHeight);
+      gutter.scrollTop = editor.scrollTop;
+      if (window.innerWidth <= 860 && currentMobileView !== 'editor') {
+        setMobileView('editor');
+      }
     }
 
     editor.addEventListener('scroll', () => {
@@ -1285,12 +1502,21 @@
     });
 
     editor.addEventListener('input', () => {
+      const original = editor.value;
+      const normalized = normalizeCodeInput(original);
+      if (original !== normalized) {
+        const start = editor.selectionStart;
+        const end = editor.selectionEnd;
+        editor.value = normalized;
+        editor.setSelectionRange(start, end);
+      }
       updateLineNumbers();
       triggerRender(false);
     });
 
-    editor.addEventListener('paste', () => {
+    editor.addEventListener('paste', (e) => {
       setTimeout(() => {
+        editor.value = normalizeCodeInput(editor.value);
         updateLineNumbers();
         triggerRender(true);
       }, 0);
@@ -1298,13 +1524,17 @@
 
     function insertSnippet(type) {
       let snippet = "";
-      if (type === 'actor') snippet = '\nactor "Tú (Usuario)" as User\n';
+      if (type === 'actor') snippet = '\nactor "Usuario" as User\n';
       else if (type === 'participant') snippet = '\nparticipant "Servicio / App" as App\n';
+      else if (type === 'rectangle') snippet = '\nrectangle "Contenedor" {\n    [Componente] as C\n}\n';
       else if (type === 'database') snippet = '\ndatabase "Base de Datos" as BD\n';
-      else if (type === 'arrow') snippet = '\nUser -> App: Enviar solicitud\nApp --> User: Responder resultado\n';
+      else if (type === 'arrow') snippet = '\nUser -> App: Enviar solicitud\nApp --> User: Respuesta exitosa\n';
       else if (type === 'alt') snippet = '\nalt Condición Exitosa\n    App -> BD: Guardar datos\nelse Condición Fallida\n    App --> User: Mostrar error\nend\n';
-      else if (type === 'note') snippet = '\nnote over App: Esta es una nota explicativa\n';
-      else if (type === 'class') snippet = '\nclass Usuario {\n    + String nombre\n    + login()\n}\n';
+      else if (type === 'loop') snippet = '\nloop Mientras haya datos\n    App -> BD: Procesar registro\nend\n';
+      else if (type === 'note') snippet = '\nnote over App: Nota explicativa del proceso\n';
+      else if (type === 'class') snippet = '\nclass Entidad {\n    + int id\n    + String nombre\n    + procesar(): void\n}\n';
+      else if (type === 'activity') snippet = '\nstart\n:Paso inicial del proceso;\nif (¿Es válido?) then (Sí)\n    :Acción correcta;\nelse (No)\n    :Mostrar alerta;\nendif\nstop\n';
+      else if (type === 'activate') snippet = '\nactivate App\ndeactivate App\n';
 
       const start = editor.selectionStart;
       const end = editor.selectionEnd;
@@ -1516,26 +1746,35 @@ skinparam footerFontColor #BAC2DE
 skinparam footerFontSize 12`
     };
 
-    const DEFAULT_BODY = `title Sistema PlantUML Studio
+    // PLANTILLA POR DEFECTO: SISTEMA DE AIRE ACONDICIONADO (CLASE DE INGENIERÍA)
+    const DEFAULT_BODY = `title Sistema Aire Acondicionado
 right footer
 Desarrollado por: GMPH2007
 Docente: Ing. Javier Eduardo Jaramillo Atoche
 GitHub: https://github.com/GMPH2007/plantuml-studio
 endfooter
 
-actor "Tú (Usuario)" as User
-participant "Editor en Vivo" as Editor
-participant "Renderizador" as Engine
+rectangle "Interior" {
+    [Termostato] as T
+    [Evaporador\\n(Enfría el aire)] as E
+    [Válvula de Expansión] as V
+}
 
-User -> Editor: Escribe o pega tu código PlantUML
-Editor -> Engine: Compilación en tiempo real
-Engine --> User: Diagrama generado al instante en HD`;
+rectangle "Exterior" {
+    [Compresor] as C
+    [Condensador\\n(Expulsa calor)] as CO
+}
 
-    
-    // ==========================================
-    // PLANTILLAS PROFESIONALES DE EJEMPLO
-    // ==========================================
+T -> C : Enciende / Apaga
+E -> C : Gas frío
+C -> V : Líquido tibio
+V -> E : Refrigerante expandido
+C -> CO : Gas caliente
+CO -> V : Líquido refrigerante`;
+
     const PRO_TEMPLATES = {
+      ac_system: DEFAULT_BODY,
+
       auth_jwt: `title Flujo de Autenticación con Token JWT
 right footer
 Desarrollado por: GMPH2007
@@ -1709,8 +1948,7 @@ Queue --> MS_Pay : Procesar cobro`
 
     function loadSelectedTemplate(key) {
       if (!key || !PRO_TEMPLATES[key]) return;
-      const cleanBody = cleanCodeStyles(PRO_TEMPLATES[key]);
-      editor.value = '@startuml\n' + cleanBody + '\n@enduml';
+      editor.value = '@startuml\n' + PRO_TEMPLATES[key] + '\n@enduml';
       document.getElementById('template-select').value = '';
       updateLineNumbers();
       triggerRender(true);
@@ -1739,21 +1977,19 @@ Queue --> MS_Pay : Procesar cobro`
       }
     }
 
-    // Atajos de teclado profesionales (VS Code Style)
+    // Atajos de teclado estilo VS Code
     document.addEventListener('keydown', (e) => {
-      // Ctrl + S -> Descargar PNG HD
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') {
         e.preventDefault();
         downloadPNG();
       }
-      // Ctrl + Enter -> Forzar compilación
       if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
         e.preventDefault();
         triggerRender(true);
       }
     });
 
-    // Soporte para tecla Tab (4 espacios) en el editor
+    // Soporte para tecla Tab (4 espacios)
     editor.addEventListener('keydown', (e) => {
       if (e.key === 'Tab') {
         e.preventDefault();
@@ -1769,32 +2005,12 @@ Queue --> MS_Pay : Procesar cobro`
       activeErrorLines.clear();
       currentErrorDiagnosis = null;
       hideErrorAlerts();
-      applyTheme(DEFAULT_BODY, document.getElementById('diagram-theme-select').value);
-    }
-
-    const ORPHAN_STYLE_REGEX = /^(title(FontSize|FontColor|FontStyle)|roundcorner|shadowing|defaultFont\w*|Arrow\w*|Actor\w*|Participant\w*|Database\w*|Alt\w*|Activity\w*|Class\w*|Package\w*|Usecase\w*|Rectangle\w*|Component\w*|Interface\w*|Cloud\w*|Queue\w*|State\w*|Sequence\w*|Note\w*|footerFont\w*)\s+/i;
-
-    function cleanCodeStyles(code) {
-      const lines = code.split('\n');
-      const filtered = lines.filter(line => {
-        const trimmed = line.trim();
-        if (trimmed.startsWith('!theme') || trimmed.startsWith('skinparam')) return false;
-        if (ORPHAN_STYLE_REGEX.test(trimmed)) return false;
-        return true;
-      });
-      return filtered.join('\n').replace(/^@startuml\s*/i, '').replace(/\s*@enduml\s*$/i, '').trim();
-    }
-
-    function applyTheme(bodyCode, themeKey) {
-      // Mantiene el editor limpio, corto y enfocado solo en el diagrama del usuario
-      const cleanBody = cleanCodeStyles(bodyCode);
-      editor.value = '@startuml\n' + cleanBody + '\n@enduml';
+      editor.value = '@startuml\n' + DEFAULT_BODY + '\n@enduml';
       updateLineNumbers();
       triggerRender(true);
     }
 
-    function changeDiagramTheme(themeKey) {
-      // Cambia el tema instantáneamente en el lienzo sin alargar ni alterar el código del usuario
+    function changeDiagramTheme() {
       triggerRender(true);
     }
 
@@ -1811,110 +2027,213 @@ Queue --> MS_Pay : Procesar cobro`
       }
     }
 
-    const VALID_START_REGEX = /^(skinparam|actor|participant|database|boundary|control|entity|collections|queue|title|right\s+footer|left\s+footer|footer|endfooter|header|endheader|autonumber|scale|alt|else|opt|loop|group|end|ref|note|end\s*note|class|interface|enum|package|node|folder|frame|cloud|database|storage|artifact|usecase|rectangle|state|start|stop|if|else|elseif|endif|while|endwhile|repeat|backward|fork|split|detach|@startuml|@enduml|!theme|'|\/')(?:\b|[\s{:])/i;
-    const ARROW_REGEX = /^[\w"().\s]+(-->|->|<-|<--|\.\.>|<\.\.|==|===)[\w"().\s]+/i;
-
-    function findExactCodeErrors(code, serverMsg, injectedLines = 0) {
-      const lines = code.split('\n');
-      const detectedBadLines = [];
-      let isSplitSkinparam = false;
-      let splitLine1 = null;
-      let splitLine2 = null;
-
-      for (let i = 0; i < lines.length - 1; i++) {
-        const t1 = lines[i].trim();
-        const t2 = lines[i+1].trim();
-        if (['sk', 'ski', 'skin', 'skinp', 'skinpa'].includes(t1.toLowerCase()) && /^(param|aram|ram|m)\b/i.test(t2)) {
-          isSplitSkinparam = true;
-          splitLine1 = i + 1;
-          splitLine2 = i + 2;
-          detectedBadLines.push(splitLine1, splitLine2);
+    // CONSTRUCCIÓN DEL PAYLOAD PARA KROKI CON MAPEO EXACTO DE LÍNEAS
+    function getPayloadForRender(rawCode) {
+      const lines = rawCode.split('\n');
+      let startIdx = -1;
+      for (let i = 0; i < lines.length; i++) {
+        if (/^\s*@startuml\b/i.test(lines[i])) {
+          startIdx = i;
           break;
         }
       }
 
-      if (isSplitSkinparam) {
-        return {
-          lines: [splitLine1, splitLine2],
-          problem: `Se presionó Enter en medio de la palabra <code>skinparam</code>:<br>
-            • Línea ${splitLine1}: <code>${escapeHtml(lines[splitLine1 - 1].trim())}</code><br>
-            • Línea ${splitLine2}: <code>${escapeHtml(lines[splitLine2 - 1].trim())}</code>`,
-          snippet: `${lines[splitLine1 - 1]}\n${lines[splitLine2 - 1]}`,
-          fixSolution: `Unir ambas líneas para formar la directiva correcta: <code>skinparam ...</code>`,
-          fixType: 'merge_split_skinparam',
-          targetLine1: splitLine1,
-          targetLine2: splitLine2
-        };
-      }
+      const themeSelect = document.getElementById('diagram-theme-select');
+      const themeKey = themeSelect ? themeSelect.value : 'oscuro';
+      const hasCustomSkin = rawCode.includes('!theme') || /skinparam\s+backgroundColor/i.test(rawCode);
 
-      for (let i = 0; i < lines.length; i++) {
-        const trimmed = lines[i].trim();
-        if (!trimmed || trimmed.startsWith("'") || trimmed.startsWith("/'") || trimmed.startsWith("!theme")) {
-          continue;
-        }
-        if (VALID_START_REGEX.test(trimmed) || ARROW_REGEX.test(trimmed) || trimmed.startsWith(':')) {
-          continue;
-        }
-        detectedBadLines.push(i + 1);
-      }
+      if (!hasCustomSkin && themeKey !== 'simple' && THEMES[themeKey]) {
+        const themeStr = THEMES[themeKey];
+        const themeLinesCount = themeStr.split('\n').length;
 
-      if (detectedBadLines.length > 0) {
-        const firstBadIndex = detectedBadLines[0] - 1;
-        const badText = lines[firstBadIndex].trim();
-
-        if (/^sk[a-z0-9_]*param/i.test(badText) || /^sk[a-z0-9_]{2,8}\b/i.test(badText)) {
+        if (startIdx >= 0) {
+          const newLines = [];
+          for (let i = 0; i < lines.length; i++) {
+            newLines.push(lines[i]);
+            if (i === startIdx) {
+              newLines.push(themeStr);
+            }
+          }
           return {
-            lines: detectedBadLines,
-            problem: `En la <b>Línea ${detectedBadLines[0]}</b> escribiste:<br><code>${escapeHtml(badText)}</code><br><br><b>¿Por qué falla?</b> Es un error al escribir <code>skinparam</code>.`,
-            snippet: badText,
-            fixSolution: `Corregir la palabra a <code>skinparam</code>.`,
-            fixType: 'typo_skinparam',
-            targetLine: detectedBadLines[0]
+            payload: newLines.join('\n'),
+            startLine1: startIdx + 1,
+            injectedCount: themeLinesCount
+          };
+        } else {
+          return {
+            payload: `@startuml\n${themeStr}\n${rawCode}\n@enduml`,
+            startLine1: 0,
+            injectedCount: themeLinesCount
           };
         }
+      }
 
-        if (ORPHAN_STYLE_REGEX.test(badText)) {
-          return {
-            lines: detectedBadLines,
-            problem: `En la <b>Línea ${detectedBadLines[0]}</b> escribiste:<br><code>${escapeHtml(badText)}</code><br><br><b>¿Por qué falla?</b> Los estilos deben comenzar con la palabra clave <code>skinparam</code>.`,
-            snippet: badText,
-            fixSolution: `Agregar <code>skinparam</code> al inicio de la línea.`,
-            fixType: 'missing_skinparam',
-            targetLine: detectedBadLines[0]
-          };
-        }
-
+      if (startIdx < 0) {
         return {
-          lines: detectedBadLines,
-          problem: `Instrucción no reconocida o texto accidental en la <b>Línea ${detectedBadLines.join(', Línea ')}</b>: <br><code>${escapeHtml(badText)}</code>`,
-          snippet: badText,
-          fixSolution: `Eliminar el texto accidental o corregirlo para que sea una instrucción válida de PlantUML.`,
-          fixType: 'clean_junk',
-          targetLine: detectedBadLines[0]
+          payload: `@startuml\n${rawCode}\n@enduml`,
+          startLine1: 0,
+          injectedCount: 0
         };
-      }
-
-      const serverLineMatch = serverMsg.match(/line:\s*(\d+)/i);
-      let sLine = serverLineMatch ? parseInt(serverLineMatch[1], 10) : 1;
-
-      // Ajustar línea del servidor restando los estilos inyectados tras bambalinas
-      if (injectedLines > 0 && sLine > injectedLines) {
-        sLine = sLine - injectedLines;
-      }
-      if (sLine < 1) sLine = 1;
-      if (sLine > lines.length) sLine = lines.length;
-
-      if (sLine < lines.length && lines[sLine] && !VALID_START_REGEX.test(lines[sLine].trim()) && !lines[sLine].trim().startsWith(':')) {
-        sLine = sLine + 1;
       }
 
       return {
-        lines: [sLine],
-        problem: `Error reportado por el motor en la <b>Línea ${sLine}</b>: ${escapeHtml(lines[sLine - 1] || '')}`,
-        snippet: lines[sLine - 1] || '',
-        fixSolution: `Verifica flechas (-> o -->), comillas dobles o que los nombres de los participantes sean válidos.`,
+        payload: rawCode,
+        startLine1: startIdx + 1,
+        injectedCount: 0
+      };
+    }
+
+    // PALABRAS CLAVE FRECUENTES PARA DETECTAR TYPOS
+    const TYPO_KEYWORDS = [
+      { regex: /^sk[a-z0-9_]*param\b/i, correct: 'skinparam' },
+      { regex: /^partic[a-z]*\b/i, correct: 'participant' },
+      { regex: /^act[a-z]*r\b/i, correct: 'actor' },
+      { regex: /^datab[a-z]*\b/i, correct: 'database' },
+      { regex: /^rectang[a-z]*\b/i, correct: 'rectangle' },
+      { regex: /^inte[a-z]*face\b/i, correct: 'interface' },
+      { regex: /^pack[a-z]*ge\b/i, correct: 'package' },
+      { regex: /^usec[a-z]*se\b/i, correct: 'usecase' },
+      { regex: /^autonumb[a-z]*\b/i, correct: 'autonumber' }
+    ];
+
+    // DIAGNÓSTICO INTELIGENTE EN ESPAÑOL Y LOCALIZACIÓN EXACTA
+    function diagnosePlantUMLError(userCode, serverMsg, startLine1, injectedCount) {
+      const lines = userCode.split('\n');
+      const totalLines = lines.length;
+
+      // 1. Extraer número de línea reportado por Kroki / PlantUML
+      const serverLineMatch = serverMsg ? serverMsg.match(/line:\s*(\d+)/i) : null;
+      let targetLine = 1;
+
+      if (serverLineMatch) {
+        const kLine = parseInt(serverLineMatch[1], 10);
+        if (injectedCount > 0) {
+          if (startLine1 > 0) {
+            targetLine = startLine1 + (kLine - injectedCount);
+          } else {
+            targetLine = kLine - injectedCount;
+          }
+        } else {
+          if (startLine1 > 0) {
+            targetLine = startLine1 + kLine;
+          } else {
+            targetLine = kLine;
+          }
+        }
+      }
+
+      if (targetLine < 1) targetLine = 1;
+      if (targetLine > totalLines) targetLine = totalLines;
+
+      const lineIdx = targetLine - 1;
+      const rawLine = lines[lineIdx] || '';
+      const trimmed = rawLine.trim();
+
+      // 2. Comprobar si hay llaves sin cerrar {
+      let openBraces = 0;
+      for (let l of lines) {
+        for (let ch of l) {
+          if (ch === '{') openBraces++;
+          if (ch === '}') openBraces--;
+        }
+      }
+      if (openBraces > 0 && targetLine >= totalLines - 1) {
+        return {
+          lines: [targetLine],
+          snippet: rawLine,
+          problem: `Faltan cerrar ${openBraces} bloque(s) con la llave de cierre <code>}</code>.`,
+          solution: `Agrega <code>}</code> para cerrar correctamente el bloque (ejemplo: <code>rectangle</code>, <code>class</code> o <code>package</code>).`,
+          fixType: 'close_brace',
+          targetLine: targetLine
+        };
+      }
+
+      // 3. Comprobar comillas dobles desbalanceadas en la línea
+      const quoteCount = (rawLine.match(/"/g) || []).length;
+      if (quoteCount % 2 !== 0) {
+        return {
+          lines: [targetLine],
+          snippet: rawLine,
+          problem: `En la <b>Línea ${targetLine}</b> hay comillas dobles sin cerrar: <code>${escapeHtml(rawLine)}</code>`,
+          solution: `Cierra el texto entre comillas dobles (ejemplo: <code>rectangle "Nombre" {</code>).`,
+          fixType: 'close_quote',
+          targetLine: targetLine
+        };
+      }
+
+      // 4. Comprobar división accidental de skinparam (Enter en medio de la palabra)
+      if (lineIdx > 0) {
+        const prevTrim = lines[lineIdx - 1].trim().toLowerCase();
+        if (['sk', 'ski', 'skin', 'skinp', 'skinpa'].includes(prevTrim)) {
+          return {
+            lines: [targetLine - 1, targetLine],
+            snippet: `${lines[lineIdx - 1]}\n${rawLine}`,
+            problem: `Se presionó Enter en medio de la directiva <code>skinparam</code> entre las líneas ${targetLine - 1} y ${targetLine}.`,
+            solution: `Une ambas líneas en una sola instrucción <code>skinparam ...</code>.`,
+            fixType: 'merge_split_skinparam',
+            targetLine1: targetLine - 1,
+            targetLine2: targetLine
+          };
+        }
+      }
+
+      // 5. Comprobar errores tipográficos en palabras clave (typos)
+      for (let kw of TYPO_KEYWORDS) {
+        if (kw.regex.test(trimmed) && !trimmed.toLowerCase().startsWith(kw.correct)) {
+          const firstWord = trimmed.split(/[\s{:"]/)[0];
+          return {
+            lines: [targetLine],
+            snippet: rawLine,
+            problem: `En la <b>Línea ${targetLine}</b> escribiste <code>${escapeHtml(firstWord)}</code> en vez de <code>${kw.correct}</code>.`,
+            solution: `Corrige la palabra para que sea <code>${kw.correct}</code>.`,
+            fixType: 'replace_word',
+            wrongWord: firstWord,
+            correctWord: kw.correct,
+            targetLine: targetLine
+          };
+        }
+      }
+
+      // 6. Flecha incompleta al final de la línea (ej: T ->)
+      if (/(-->|->|<-|<--|\.\.>|<\.\.)\s*$/.test(trimmed)) {
+        return {
+          lines: [targetLine],
+          snippet: rawLine,
+          problem: `En la <b>Línea ${targetLine}</b> la flecha está incompleta: <code>${escapeHtml(trimmed)}</code>. Falta indicar el elemento de destino.`,
+          solution: `Indica el destinatario tras la flecha (ejemplo: <code>${escapeHtml(trimmed)} Destino : Mensaje</code>).`,
+          fixType: 'complete_arrow',
+          targetLine: targetLine
+        };
+      }
+
+      // 7. Footer multilínea sin endfooter
+      if (/(right\s+footer|left\s+footer|footer)/i.test(userCode) && !/endfooter/i.test(userCode)) {
+        return {
+          lines: [targetLine],
+          snippet: rawLine,
+          problem: `La directiva de pie de página (footer) requiere cerrarse con <code>endfooter</code>.`,
+          solution: `Agrega <code>endfooter</code> después del texto del footer.`,
+          fixType: 'add_endfooter',
+          targetLine: targetLine
+        };
+      }
+
+      // 8. Error general con contexto
+      let contextSnippet = rawLine;
+      if (lines.length > 1) {
+        const prev = lineIdx > 0 ? `L${targetLine - 1}: ${lines[lineIdx - 1]}\n` : '';
+        const curr = `L${targetLine}: ${rawLine}  <-- [ERROR AQUÍ]\n`;
+        const next = lineIdx < totalLines - 1 ? `L${targetLine + 1}: ${lines[lineIdx + 1]}` : '';
+        contextSnippet = prev + curr + next;
+      }
+
+      return {
+        lines: [targetLine],
+        snippet: contextSnippet,
+        problem: `Error de sintaxis detectado por el motor en la <b>Línea ${targetLine}</b>: <code>${escapeHtml(trimmed || 'Línea vacía o con formato inesperado')}</code>`,
+        solution: `Revisa que las flechas (<code>-></code>, <code>--></code>), nombres de elementos y llaves <code>{ }</code> estén bien escritas.`,
         fixType: 'generic',
-        targetLine: sLine
+        targetLine: targetLine
       };
     }
 
@@ -1925,6 +2244,10 @@ Queue --> MS_Pay : Procesar cobro`
     function hideErrorAlerts() {
       tabBadgeErr.style.display = 'none';
       mobileErrorToast.style.display = 'none';
+      if (fabPreviewBtn) {
+        fabPreviewBtn.className = 'fab-switch fab-preview';
+        fabPreviewBtn.innerHTML = '👁️ Ver Diagrama';
+      }
     }
 
     function showDetailedError(diag) {
@@ -1942,17 +2265,22 @@ Queue --> MS_Pay : Procesar cobro`
       mobileToastText.textContent = `⚠️ Error en ${linesStr}`;
       mobileErrorToast.style.display = 'flex';
 
+      if (fabPreviewBtn) {
+        fabPreviewBtn.className = 'fab-switch fab-error';
+        fabPreviewBtn.innerHTML = `⚠️ Error en ${linesStr}`;
+      }
+
       previewBox.style.background = document.body.classList.contains('light-mode') ? "#f8fafc" : "#0b0f19";
 
       let snippetHtml = diag.snippet ? `
-        <div class="error-label">Texto con error:</div>
+        <div class="error-label">CÓDIGO CON ERROR:</div>
         <div class="error-code-box">${escapeHtml(diag.snippet)}</div>
       ` : '';
 
       previewBox.innerHTML = `
         <div class="error-card">
           <div class="error-title-row">
-            <span class="error-badge">⚠️ Error de Sintaxis</span>
+            <span class="error-badge">⚠️ Error de Sintaxis PlantUML</span>
             <span class="error-lines-badge">${linesStr}</span>
           </div>
           <div class="error-label">¿QUÉ CÓDIGO ESTÁ MAL?</div>
@@ -1960,15 +2288,21 @@ Queue --> MS_Pay : Procesar cobro`
           ${snippetHtml}
           <div class="error-label">¿CÓMO SOLUCIONARLO?</div>
           <div class="error-text" style="border-left-color: #10b981; background: #f0fdf4;">
-            ${diag.fixSolution}
+            ${diag.solution}
           </div>
-          <button class="btn-fix" onclick="executeAutoFix()">
-            ⚡ Corregir este error automáticamente (1 Clic)
-          </button>
+          <div class="error-actions-row">
+            <button class="btn-fix" onclick="executeAutoFix()">
+              ⚡ Corregir automáticamente (1 Clic)
+            </button>
+            <button class="btn-goto-line" onclick="goToLine(${diag.targetLine || diag.lines[0]})">
+              ✏️ Ir a la Línea ${diag.targetLine || diag.lines[0]}
+            </button>
+          </div>
         </div>
       `;
     }
 
+    // AUTO-FIX INTELIGENTE QUE NUNCA BORRA LÍNEAS VÁLIDAS
     function executeAutoFix() {
       if (!currentErrorDiagnosis) return;
       const diag = currentErrorDiagnosis;
@@ -1982,27 +2316,37 @@ Queue --> MS_Pay : Procesar cobro`
         lines[l1] = 'skinparam ' + line2Rest;
         lines.splice(l2, 1);
         editor.value = lines.join('\n');
-      } else if (type === 'typo_skinparam') {
+      } else if (type === 'replace_word') {
         const idx = diag.targetLine - 1;
-        lines[idx] = lines[idx].replace(/^([a-zA-Z0-9_]+)\s+/, 'skinparam ');
+        if (lines[idx]) {
+          lines[idx] = lines[idx].replace(new RegExp(diag.wrongWord, 'i'), diag.correctWord);
+          editor.value = lines.join('\n');
+        }
+      } else if (type === 'close_brace') {
+        lines.push('}');
         editor.value = lines.join('\n');
-      } else if (type === 'missing_skinparam') {
+      } else if (type === 'close_quote') {
         const idx = diag.targetLine - 1;
-        lines[idx] = 'skinparam ' + lines[idx].trim();
-        editor.value = lines.join('\n');
-      } else if (type === 'clean_junk') {
-        const badSet = new Set(diag.lines.map(n => n - 1));
-        lines = lines.filter((_, idx) => !badSet.has(idx));
-        editor.value = lines.join('\n');
-      } else if (type === 'activity_missing_colons') {
+        if (lines[idx]) {
+          lines[idx] = lines[idx] + '"';
+          editor.value = lines.join('\n');
+        }
+      } else if (type === 'add_endfooter') {
         const idx = diag.targetLine - 1;
-        let t = lines[idx].trim();
-        if (!t.startsWith(':')) t = ':' + t;
-        if (!t.endsWith(';')) t = t + ';';
-        lines[idx] = t;
+        lines.splice(idx + 1, 0, 'endfooter');
         editor.value = lines.join('\n');
+      } else if (type === 'complete_arrow') {
+        const idx = diag.targetLine - 1;
+        if (lines[idx]) {
+          lines[idx] = lines[idx] + ' Destino : Mensaje';
+          editor.value = lines.join('\n');
+        }
       } else {
-        editor.value = '@startuml\n' + cleanCodeStyles(editor.value) + '\n@enduml';
+        // En caso general, asegurar @startuml y @enduml
+        let code = editor.value.trim();
+        if (!/^@startuml/i.test(code)) code = '@startuml\n' + code;
+        if (!/@enduml$/i.test(code)) code = code + '\n@enduml';
+        editor.value = code;
       }
 
       currentErrorDiagnosis = null;
@@ -2092,41 +2436,6 @@ Queue --> MS_Pay : Procesar cobro`
       }
     }
 
-    function getPayloadForRender(rawCode) {
-      let code = rawCode.trim();
-      if (!code) return { payload: '', injectedLines: 0 };
-
-      const themeSelect = document.getElementById('diagram-theme-select');
-      const themeKey = themeSelect ? themeSelect.value : 'oscuro';
-
-      // Si el usuario ya escribió sus propios estilos o !theme, o si eligió clásico simple, no inyectar
-      const hasCustomSkin = code.includes('!theme') || /skinparam\s+backgroundColor/i.test(code);
-
-      if (!hasCustomSkin && themeKey !== 'simple' && THEMES[themeKey]) {
-        const themeStr = THEMES[themeKey];
-        const themeLines = themeStr.split('\n').length + 1;
-
-        if (/^@startuml/i.test(code)) {
-          const match = code.match(/^@startuml[^\n]*\n?/i);
-          const prefix = match ? match[0] : '@startuml\n';
-          const rest = code.slice(prefix.length);
-          return {
-            payload: `${prefix}${themeStr}\n\n${rest}`,
-            injectedLines: themeLines
-          };
-        } else {
-          return {
-            payload: `@startuml\n${themeStr}\n\n${code}\n@enduml`,
-            injectedLines: themeLines
-          };
-        }
-      }
-
-      if (!/^@startuml/i.test(code)) {
-        code = `@startuml\n${code}\n@enduml`;
-      }
-      return { payload: code, injectedLines: 0 };
-    }
     async function render() {
       const code = editor.value.trim();
       if (!code) {
@@ -2168,7 +2477,7 @@ Queue --> MS_Pay : Procesar cobro`
       }
       abortController = new AbortController();
 
-      const { payload, injectedLines } = getPayloadForRender(code);
+      const { payload, startLine1, injectedCount } = getPayloadForRender(code);
 
       try {
         const res = await fetch('https://kroki.io/plantuml/svg', {
@@ -2180,7 +2489,7 @@ Queue --> MS_Pay : Procesar cobro`
 
         if (!res.ok) {
           const errorMsg = await res.text();
-          const diagnosis = findExactCodeErrors(code, errorMsg, injectedLines);
+          const diagnosis = diagnosePlantUMLError(code, errorMsg, startLine1, injectedCount);
           showDetailedError(diagnosis);
           return;
         }
@@ -2199,7 +2508,7 @@ Queue --> MS_Pay : Procesar cobro`
         statusLeft.style.color = "#34d399";
       } catch (err) {
         if (err.name === 'AbortError') return;
-        const diagnosis = findExactCodeErrors(code, err.message || "Error", injectedLines);
+        const diagnosis = diagnosePlantUMLError(code, err.message || "Error", startLine1, injectedCount);
         showDetailedError(diagnosis);
       }
     }
@@ -2232,10 +2541,7 @@ Queue --> MS_Pay : Procesar cobro`
       URL.revokeObjectURL(url);
     }
 
-    
-    // ==========================================
     // SISTEMA VIRAL DE COMPARTIR Y URL HASH
-    // ==========================================
     function getShareableUrl() {
       try {
         const code = editor.value;
@@ -2250,7 +2556,6 @@ Queue --> MS_Pay : Procesar cobro`
       const shareUrl = getShareableUrl();
       document.getElementById('share-url-input').value = shareUrl;
 
-      // Generar enlaces sociales virales
       const msg = encodeURIComponent("🚀 Crea y edita diagramas UML en tiempo real sin anuncios con PlantUML Studio:\n" + shareUrl);
       document.getElementById('share-wa').href = `https://api.whatsapp.com/send?text=${msg}`;
       document.getElementById('share-tw').href = `https://twitter.com/intent/tweet?text=${msg}`;
@@ -2289,17 +2594,14 @@ Queue --> MS_Pay : Procesar cobro`
       return false;
     }
 
-    // ==========================================
     // MULTILENGUAJE INTERNACIONAL (i18n)
-    // ==========================================
     const I18N = {
       es: {
         share: "Compartir",
         clear: "Vaciar",
         copy: "Copiar",
         reset: "Reset",
-        preview: "Diagrama en Vivo",
-        copyHd: "📋 Copiar HD",
+        preview: "👁️ Diagrama en Vivo",
         editorTitle: "✏️ Editor PlantUML"
       },
       en: {
@@ -2307,8 +2609,7 @@ Queue --> MS_Pay : Procesar cobro`
         clear: "Clear",
         copy: "Copy Code",
         reset: "Reset",
-        preview: "Live Preview",
-        copyHd: "📋 Copy HD",
+        preview: "👁️ Live Preview",
         editorTitle: "✏️ PlantUML Editor"
       },
       pt: {
@@ -2316,8 +2617,7 @@ Queue --> MS_Pay : Procesar cobro`
         clear: "Limpar",
         copy: "Copiar",
         reset: "Resetar",
-        preview: "Visualização",
-        copyHd: "📋 Copiar HD",
+        preview: "👁️ Visualização",
         editorTitle: "✏️ Editor PlantUML"
       },
       ja: {
@@ -2325,8 +2625,7 @@ Queue --> MS_Pay : Procesar cobro`
         clear: "クリア",
         copy: "コードをコピー",
         reset: "リセット",
-        preview: "プレビュー",
-        copyHd: "📋 HDコピー",
+        preview: "👁️ プレビュー",
         editorTitle: "✏️ PlantUML エディタ"
       }
     };
@@ -2335,6 +2634,10 @@ Queue --> MS_Pay : Procesar cobro`
       const t = I18N[lang] || I18N['es'];
       const txtShare = document.getElementById('txt-btn-share');
       if (txtShare) txtShare.textContent = t.share;
+      const tPreview = document.getElementById('title-preview-lbl');
+      if (tPreview) tPreview.textContent = t.preview;
+      const tEditor = document.getElementById('title-editor-lbl');
+      if (tEditor) tEditor.textContent = t.editorTitle;
       localStorage.setItem('pm_lang', lang);
     }
 
@@ -2345,14 +2648,27 @@ Queue --> MS_Pay : Procesar cobro`
         document.body.classList.add('light-mode');
         themeToggleBtn.textContent = '🌙 Oscuro';
       }
-      if (!hasHash) { loadDefaultDiagram(); } else { updateLineNumbers(); triggerRender(true); }
+      if (!hasHash) {
+        loadDefaultDiagram();
+      } else {
+        updateLineNumbers();
+        triggerRender(true);
+      }
 
-      // En móviles, mostrar el botón rápido de 'Ver Diagrama' en el footer del editor
-      if (window.innerWidth <= 820) {
-        const qBtn = document.getElementById('btn-quick-preview');
-        if (qBtn) qBtn.style.display = 'inline-flex';
+      // Responsive inicial según tamaño de pantalla
+      if (window.innerWidth <= 860) {
+        setMobileView('editor');
       }
     };
+
+    window.addEventListener('resize', () => {
+      if (window.innerWidth > 860) {
+        fabPreviewBtn.style.display = 'none';
+        fabEditorBtn.style.display = 'none';
+      } else {
+        setMobileView(currentMobileView);
+      }
+    });
   </script>
 
   <!-- MODAL DE COMPARTIR VIRAL (SHARE) -->
@@ -2411,7 +2727,8 @@ Queue --> MS_Pay : Procesar cobro`
 
     <h3>📌 Diagramas Soportados:</h3>
     <p>Diagramas de Secuencia, Diagramas de Clases, Casos de Uso, Diagramas de Actividad, Diagramas de Componentes, Máquinas de Estado, Diagramas de Despliegue y Mapas Mentales.</p>
-      <!-- SECCIÓN DE PREGUNTAS FRECUENTES (FAQ) DE ALTO VALOR SEO -->
+    
+    <!-- SECCIÓN DE PREGUNTAS FRECUENTES (FAQ) DE ALTO VALOR SEO -->
     <div class="seo-faq-section">
       <h3 style="font-size: 1.15rem; color: #89b4fa; margin: 0 0 14px 0;">❓ Preguntas Frecuentes sobre PlantUML (Guía Rápida)</h3>
       
@@ -2464,7 +2781,6 @@ Queue --> MS_Pay : Procesar cobro`
         </div>
       </details>
     </div>
-
   </footer>
 
 </body>
