@@ -2127,6 +2127,23 @@ Queue --> MS_Pay : Procesar cobro`
       };
     }
 
+    // PALABRAS CLAVE EN ESPAÑOL FRECUENTES EN CLASE
+    const SPANISH_KEYWORDS = [
+      { regex: /^\s*clase\b/i, correct: 'class' },
+      { regex: /^\s*interfaz\b/i, correct: 'interface' },
+      { regex: /^\s*paquete\b/i, correct: 'package' },
+      { regex: /^\s*rectangulo\b/i, correct: 'rectangle' },
+      { regex: /^\s*caso\b/i, correct: 'usecase' },
+      { regex: /^\s*bd\b/i, correct: 'database' },
+      { regex: /^\s*base\s+de\s+datos\b/i, correct: 'database' },
+      { regex: /^\s*participante\b/i, correct: 'participant' },
+      { regex: /^\s*titulo\b/i, correct: 'title' },
+      { regex: /^\s*activar\b/i, correct: 'activate' },
+      { regex: /^\s*desactivar\b/i, correct: 'deactivate' },
+      { regex: /^\s*retornar\b/i, correct: 'return' },
+      { regex: /^\s*pie\b/i, correct: 'footer' }
+    ];
+
     // PALABRAS CLAVE FRECUENTES PARA DETECTAR TYPOS
     const TYPO_KEYWORDS = [
       { regex: /^sk[a-z0-9_]*param\b/i, correct: 'skinparam' },
@@ -2137,7 +2154,8 @@ Queue --> MS_Pay : Procesar cobro`
       { regex: /^inte[a-z]*face\b/i, correct: 'interface' },
       { regex: /^pack[a-z]*ge\b/i, correct: 'package' },
       { regex: /^usec[a-z]*se\b/i, correct: 'usecase' },
-      { regex: /^autonumb[a-z]*\b/i, correct: 'autonumber' }
+      { regex: /^autonumb[a-z]*\b/i, correct: 'autonumber' },
+      { regex: /^titl[a-z]*\b/i, correct: 'title' }
     ];
 
     // DIAGNÓSTICO INTELIGENTE EN ESPAÑOL Y LOCALIZACIÓN EXACTA
@@ -2185,7 +2203,7 @@ Queue --> MS_Pay : Procesar cobro`
           if (ch === '}') openBraces--;
         }
       }
-      if (openBraces > 0 && targetLine >= totalLines - 1) {
+      if (openBraces > 0 && (targetLine >= totalLines - 1 || targetLine === totalLines)) {
         return {
           lines: [targetLine],
           snippet: rawLine,
@@ -2196,36 +2214,49 @@ Queue --> MS_Pay : Procesar cobro`
         };
       }
 
-      // 3. Comprobar comillas dobles desbalanceadas en la línea
-      const quoteCount = (rawLine.match(/"/g) || []).length;
-      if (quoteCount % 2 !== 0) {
+      // 3. Comprobar comentarios estilo C++ (//) o Shell (#)
+      if (/^(\/\/|#)/.test(trimmed)) {
+        const symbol = trimmed.startsWith('//') ? '//' : '#';
         return {
           lines: [targetLine],
           snippet: rawLine,
-          problem: `En la <b>Línea ${targetLine}</b> hay comillas dobles sin cerrar: <code>${escapeHtml(rawLine)}</code>`,
-          solution: `Cierra el texto entre comillas dobles (ejemplo: <code>rectangle "Nombre" {</code>).`,
-          fixType: 'close_quote',
+          problem: `En la <b>Línea ${targetLine}</b> usaste <code>${symbol}</code> para comentar. En PlantUML los comentarios deben iniciar con comilla simple <code>'</code>.`,
+          solution: `Cambia <code>${symbol}</code> por <code>'</code> al inicio del comentario.`,
+          fixType: 'replace_comment',
           targetLine: targetLine
         };
       }
 
-      // 4. Comprobar división accidental de skinparam (Enter en medio de la palabra)
-      if (lineIdx > 0) {
-        const prevTrim = lines[lineIdx - 1].trim().toLowerCase();
-        if (['sk', 'ski', 'skin', 'skinp', 'skinpa'].includes(prevTrim)) {
+      // 4. Comprobar flechas rotas (- >, = >, - ->) o flechas Unicode (→, ←)
+      if (/(- >|= >|- ->|\u2192|\u2190|\u21D2)/.test(rawLine)) {
+        return {
+          lines: [targetLine],
+          snippet: rawLine,
+          problem: `En la <b>Línea ${targetLine}</b> la flecha tiene un formato no reconocido o contiene símbolos Unicode.`,
+          solution: `Usa la sintaxis estándar de flechas: <code>-&gt;</code>, <code>--&gt;</code>, <code>&lt;-</code> o <code>&lt;--</code>.`,
+          fixType: 'fix_arrow_format',
+          targetLine: targetLine
+        };
+      }
+
+      // 5. Comprobar palabras clave escritas en español
+      for (let sk of SPANISH_KEYWORDS) {
+        if (sk.regex.test(trimmed)) {
+          const matched = trimmed.split(/[\s{:"]/)[0];
           return {
-            lines: [targetLine - 1, targetLine],
-            snippet: `${lines[lineIdx - 1]}\n${rawLine}`,
-            problem: `Se presionó Enter en medio de la directiva <code>skinparam</code> entre las líneas ${targetLine - 1} y ${targetLine}.`,
-            solution: `Une ambas líneas en una sola instrucción <code>skinparam ...</code>.`,
-            fixType: 'merge_split_skinparam',
-            targetLine1: targetLine - 1,
-            targetLine2: targetLine
+            lines: [targetLine],
+            snippet: rawLine,
+            problem: `En la <b>Línea ${targetLine}</b> escribiste <code>${escapeHtml(matched)}</code> en español. La instrucción oficial en PlantUML es <code>${sk.correct}</code>.`,
+            solution: `Cambia <code>${escapeHtml(matched)}</code> por la palabra clave oficial <code>${sk.correct}</code>.`,
+            fixType: 'replace_spanish_keyword',
+            spanishRegex: sk.regex,
+            correctWord: sk.correct,
+            targetLine: targetLine
           };
         }
       }
 
-      // 5. Comprobar errores tipográficos en palabras clave (typos)
+      // 6. Comprobar errores tipográficos en palabras clave (typos)
       for (let kw of TYPO_KEYWORDS) {
         if (kw.regex.test(trimmed) && !trimmed.toLowerCase().startsWith(kw.correct)) {
           const firstWord = trimmed.split(/[\s{:"]/)[0];
@@ -2242,7 +2273,50 @@ Queue --> MS_Pay : Procesar cobro`
         }
       }
 
-      // 6. Flecha incompleta al final de la línea (ej: T ->)
+      // 7. Comprobar corchete sin cerrar [
+      const openBracket = (rawLine.match(/\[/g) || []).length;
+      const closeBracket = (rawLine.match(/\]/g) || []).length;
+      if (openBracket > closeBracket) {
+        return {
+          lines: [targetLine],
+          snippet: rawLine,
+          problem: `En la <b>Línea ${targetLine}</b> abriste un corchete <code>[</code> sin cerrarlo con <code>]</code>.`,
+          solution: `Agrega el corchete de cierre <code>]</code> (ejemplo: <code>[Componente] as C</code>).`,
+          fixType: 'close_bracket',
+          targetLine: targetLine
+        };
+      }
+
+      // 8. Comprobar comillas dobles desbalanceadas en la línea
+      const quoteCount = (rawLine.match(/"/g) || []).length;
+      if (quoteCount % 2 !== 0) {
+        return {
+          lines: [targetLine],
+          snippet: rawLine,
+          problem: `En la <b>Línea ${targetLine}</b> hay comillas dobles sin cerrar: <code>${escapeHtml(rawLine)}</code>`,
+          solution: `Cierra el texto entre comillas dobles (ejemplo: <code>rectangle "Nombre" {</code>).`,
+          fixType: 'close_quote',
+          targetLine: targetLine
+        };
+      }
+
+      // 9. Comprobar división accidental de skinparam (Enter en medio de la palabra)
+      if (lineIdx > 0) {
+        const prevTrim = lines[lineIdx - 1].trim().toLowerCase();
+        if (['sk', 'ski', 'skin', 'skinp', 'skinpa'].includes(prevTrim)) {
+          return {
+            lines: [targetLine - 1, targetLine],
+            snippet: `${lines[lineIdx - 1]}\n${rawLine}`,
+            problem: `Se presionó Enter en medio de la directiva <code>skinparam</code> entre las líneas ${targetLine - 1} y ${targetLine}.`,
+            solution: `Une ambas líneas en una sola instrucción <code>skinparam ...</code>.`,
+            fixType: 'merge_split_skinparam',
+            targetLine1: targetLine - 1,
+            targetLine2: targetLine
+          };
+        }
+      }
+
+      // 10. Flecha incompleta al final de la línea (ej: T ->)
       if (/(-->|->|<-|<--|\.\.>|<\.\.)\s*$/.test(trimmed)) {
         return {
           lines: [targetLine],
@@ -2254,7 +2328,7 @@ Queue --> MS_Pay : Procesar cobro`
         };
       }
 
-      // 7. Footer multilínea sin endfooter
+      // 11. Footer multilínea sin endfooter
       if (/(right\s+footer|left\s+footer|footer)/i.test(userCode) && !/endfooter/i.test(userCode)) {
         return {
           lines: [targetLine],
@@ -2266,7 +2340,19 @@ Queue --> MS_Pay : Procesar cobro`
         };
       }
 
-      // 8. Error general con contexto
+      // 12. Mensaje en flecha sin dos puntos (ej: User -> App mensaje)
+      if (/(->|-->|<-|<--)\s*([a-zA-Z0-9_]+)\s+([^:\s][^:\n]*)$/.test(trimmed)) {
+        return {
+          lines: [targetLine],
+          snippet: rawLine,
+          problem: `En la <b>Línea ${targetLine}</b> el mensaje de la flecha requiere dos puntos <code>:</code>.`,
+          solution: `Separa el destinatario del mensaje con dos puntos (ejemplo: <code>A -&gt; B : Mensaje</code>).`,
+          fixType: 'missing_colon',
+          targetLine: targetLine
+        };
+      }
+
+      // 13. Error general de sintaxis con solución inteligente: comentar la línea inválida
       let contextSnippet = rawLine;
       if (lines.length > 1) {
         const prev = lineIdx > 0 ? `L${targetLine - 1}: ${lines[lineIdx - 1]}\n` : '';
@@ -2279,8 +2365,8 @@ Queue --> MS_Pay : Procesar cobro`
         lines: [targetLine],
         snippet: contextSnippet,
         problem: `Error de sintaxis detectado por el motor en la <b>Línea ${targetLine}</b>: <code>${escapeHtml(trimmed || 'Línea vacía o con formato inesperado')}</code>`,
-        solution: `Revisa que las flechas (<code>-></code>, <code>--></code>), nombres de elementos y llaves <code>{ }</code> estén bien escritas.`,
-        fixType: 'generic',
+        solution: `Haz clic en <b>Corregir automáticamente</b> para comentar esta línea inválida con <code>'</code> y permitir que tu diagrama compile de inmediato.`,
+        fixType: 'comment_invalid_line',
         targetLine: targetLine
       };
     }
@@ -2350,7 +2436,7 @@ Queue --> MS_Pay : Procesar cobro`
       `;
     }
 
-    // AUTO-FIX INTELIGENTE QUE NUNCA BORRA LÍNEAS VÁLIDAS
+    // AUTO-FIX INTELIGENTE QUE REPARA CUALQUIER ERROR
     function executeAutoFix() {
       if (!currentErrorDiagnosis) return;
       const diag = currentErrorDiagnosis;
@@ -2366,17 +2452,53 @@ Queue --> MS_Pay : Procesar cobro`
         editor.value = lines.join('\n');
       } else if (type === 'replace_word') {
         const idx = diag.targetLine - 1;
-        if (lines[idx]) {
+        if (lines[idx] !== undefined) {
           lines[idx] = lines[idx].replace(new RegExp(diag.wrongWord, 'i'), diag.correctWord);
+          editor.value = lines.join('\n');
+        }
+      } else if (type === 'replace_spanish_keyword') {
+        const idx = diag.targetLine - 1;
+        if (lines[idx] !== undefined) {
+          lines[idx] = lines[idx].replace(diag.spanishRegex, diag.correctWord);
+          editor.value = lines.join('\n');
+        }
+      } else if (type === 'replace_comment') {
+        const idx = diag.targetLine - 1;
+        if (lines[idx] !== undefined) {
+          lines[idx] = lines[idx].replace(/^(\s*)(\/\/|#)/, "$1'");
+          editor.value = lines.join('\n');
+        }
+      } else if (type === 'fix_arrow_format') {
+        const idx = diag.targetLine - 1;
+        if (lines[idx] !== undefined) {
+          lines[idx] = lines[idx]
+            .replace(/- >/g, '->')
+            .replace(/= >/g, '->')
+            .replace(/- ->/g, '-->')
+            .replace(/\u2192/g, '->')
+            .replace(/\u2190/g, '<-')
+            .replace(/\u21D2/g, '-->');
           editor.value = lines.join('\n');
         }
       } else if (type === 'close_brace') {
         lines.push('}');
         editor.value = lines.join('\n');
+      } else if (type === 'close_bracket') {
+        const idx = diag.targetLine - 1;
+        if (lines[idx] !== undefined) {
+          lines[idx] = lines[idx] + ']';
+          editor.value = lines.join('\n');
+        }
       } else if (type === 'close_quote') {
         const idx = diag.targetLine - 1;
-        if (lines[idx]) {
+        if (lines[idx] !== undefined) {
           lines[idx] = lines[idx] + '"';
+          editor.value = lines.join('\n');
+        }
+      } else if (type === 'missing_colon') {
+        const idx = diag.targetLine - 1;
+        if (lines[idx] !== undefined) {
+          lines[idx] = lines[idx].replace(/(->|-->|<-|<--)\s*([a-zA-Z0-9_]+)\s+([^:\s][^:\n]*)$/, '$1 $2 : $3');
           editor.value = lines.join('\n');
         }
       } else if (type === 'add_endfooter') {
@@ -2385,18 +2507,27 @@ Queue --> MS_Pay : Procesar cobro`
         editor.value = lines.join('\n');
       } else if (type === 'complete_arrow') {
         const idx = diag.targetLine - 1;
-        if (lines[idx]) {
+        if (lines[idx] !== undefined) {
           lines[idx] = lines[idx] + ' Destino : Mensaje';
           editor.value = lines.join('\n');
         }
+      } else if (type === 'comment_invalid_line') {
+        const idx = diag.targetLine - 1;
+        if (lines[idx] !== undefined) {
+          lines[idx] = "' " + lines[idx];
+          editor.value = lines.join('\n');
+        }
       } else {
-        // En caso general, asegurar @startuml y @enduml
-        let code = editor.value.trim();
-        if (!/^@startuml/i.test(code)) code = '@startuml\n' + code;
-        if (!/@enduml$/i.test(code)) code = code + '\n@enduml';
-        editor.value = code;
+        // En caso extremo, comentar la línea que causa error para desbloquear
+        const idx = (diag.targetLine || 1) - 1;
+        if (lines[idx] !== undefined) {
+          lines[idx] = "' " + lines[idx];
+          editor.value = lines.join('\n');
+        }
       }
 
+      // Normalizar cualquier caracter Unicode restante
+      editor.value = normalizeCodeInput(editor.value);
       currentErrorDiagnosis = null;
       activeErrorLines.clear();
       hideErrorAlerts();
