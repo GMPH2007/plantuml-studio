@@ -530,45 +530,72 @@
       flex-wrap: wrap;
     }
 
+    .header-select {
+      background: var(--card-bg);
+      color: var(--text);
+      border: 1px solid var(--card-border);
+      padding: 6px 10px;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      outline: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .header-select:hover, .header-select:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+    }
+
     /* BARRA DESLIZANTE DE SNIPPETS */
     .snippets-bar {
       background: var(--gutter-bg);
       border-bottom: 1px solid var(--card-border);
-      padding: 7px 10px;
+      padding: 8px 12px;
       display: flex;
-      gap: 6px;
+      gap: 7px;
       overflow-x: auto;
       align-items: center;
       white-space: nowrap;
       -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
+      scrollbar-width: thin;
+      scrollbar-color: var(--card-border) transparent;
     }
     .snippets-bar::-webkit-scrollbar {
-      display: none;
+      height: 4px;
+    }
+    .snippets-bar::-webkit-scrollbar-thumb {
+      background: var(--card-border);
+      border-radius: 4px;
     }
 
     .snippet-chip {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
       color: var(--text);
-      font-size: 0.76rem;
+      font-size: 0.78rem;
       font-weight: 600;
-      padding: 5px 9px;
-      border-radius: 7px;
+      padding: 5px 10px;
+      border-radius: 8px;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
-      gap: 4px;
+      gap: 5px;
       flex-shrink: 0;
       user-select: none;
-      transition: all 0.15s;
+      transition: all 0.15s ease-in-out;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
     }
 
-    .snippet-chip:hover, .snippet-chip:active {
+    .snippet-chip:hover {
       background: var(--primary);
       color: white;
       border-color: var(--primary);
       transform: translateY(-1px);
+      box-shadow: 0 2px 6px rgba(59, 130, 246, 0.3);
+    }
+    .snippet-chip:active {
+      transform: scale(0.97);
     }
 
     /* CONTENEDOR DEL EDITOR Y GUTTER */
@@ -1238,14 +1265,14 @@
   </div>
 
   <!-- WORKSPACE PRINCIPAL -->
-  <div class="workspace view-editor" id="workspace">
+  <div class="workspace" id="workspace">
 
     <!-- PANEL DEL EDITOR DE CÓDIGO -->
     <div class="panel" id="panel-editor">
       <div class="panel-header">
         <span id="title-editor-lbl">✏️ Editor PlantUML</span>
-        <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
-          <select id="template-select" onchange="loadSelectedTemplate(this.value)" style="background: var(--code-bg); color: var(--text); border: 1px solid var(--card-border); padding: 5px 8px; border-radius: 6px; font-size: 0.8rem; outline: none; cursor: pointer; font-weight: 600;">
+        <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+          <select id="template-select" class="header-select" onchange="loadSelectedTemplate(this.value)">
             <option value="" selected>📚 Plantillas...</option>
             <option value="ac_system">❄️ Arquitectura: Aire Acondicionado</option>
             <option value="auth_jwt">🔐 Secuencia: Login y JWT</option>
@@ -1254,7 +1281,7 @@
             <option value="checkout_activity">🔀 Actividad: Compra y Pago</option>
             <option value="microservices">🧱 Arquitectura Cloud</option>
           </select>
-          <select id="diagram-theme-select" onchange="changeDiagramTheme(this.value)" style="background: var(--code-bg); color: var(--text); border: 1px solid var(--card-border); padding: 5px 8px; border-radius: 6px; font-size: 0.8rem; outline: none; cursor: pointer;">
+          <select id="diagram-theme-select" class="header-select" onchange="changeDiagramTheme(this.value)">
             <option value="oscuro" selected>🌙 Dark Neón</option>
             <option value="moderno">☀️ Moderno Azul</option>
             <option value="simple">📄 Clásico Simple</option>
@@ -2069,13 +2096,15 @@ Queue --> MS_Pay : Procesar cobro`
           }
           return {
             payload: newLines.join('\n'),
-            startLine1: startIdx + 1,
+            hasStartUml: true,
+            startIdx0: startIdx,
             injectedCount: themeLinesCount
           };
         } else {
           return {
             payload: `@startuml\n${themeStr}\n${rawCode}\n@enduml`,
-            startLine1: 0,
+            hasStartUml: false,
+            startIdx0: -1,
             injectedCount: themeLinesCount
           };
         }
@@ -2084,14 +2113,16 @@ Queue --> MS_Pay : Procesar cobro`
       if (startIdx < 0) {
         return {
           payload: `@startuml\n${rawCode}\n@enduml`,
-          startLine1: 0,
+          hasStartUml: false,
+          startIdx0: -1,
           injectedCount: 0
         };
       }
 
       return {
         payload: rawCode,
-        startLine1: startIdx + 1,
+        hasStartUml: true,
+        startIdx0: startIdx,
         injectedCount: 0
       };
     }
@@ -2110,27 +2141,31 @@ Queue --> MS_Pay : Procesar cobro`
     ];
 
     // DIAGNÓSTICO INTELIGENTE EN ESPAÑOL Y LOCALIZACIÓN EXACTA
-    function diagnosePlantUMLError(userCode, serverMsg, startLine1, injectedCount) {
+    function diagnosePlantUMLError(userCode, serverMsg, hasStartUml, startIdx0, injectedCount) {
       const lines = userCode.split('\n');
       const totalLines = lines.length;
 
-      // 1. Extraer número de línea reportado por Kroki / PlantUML
+      // 1. Extraer número de línea reportado por Kroki / PlantUML con mapeo exacto
       const serverLineMatch = serverMsg ? serverMsg.match(/line:\s*(\d+)/i) : null;
       let targetLine = 1;
 
       if (serverLineMatch) {
         const kLine = parseInt(serverLineMatch[1], 10);
         if (injectedCount > 0) {
-          if (startLine1 > 0) {
-            targetLine = startLine1 + (kLine - injectedCount);
+          if (hasStartUml) {
+            if (kLine <= startIdx0 + 1) {
+              targetLine = kLine;
+            } else {
+              targetLine = kLine - injectedCount;
+            }
           } else {
-            targetLine = kLine - injectedCount;
+            targetLine = kLine - (1 + injectedCount);
           }
         } else {
-          if (startLine1 > 0) {
-            targetLine = startLine1 + kLine;
-          } else {
+          if (hasStartUml) {
             targetLine = kLine;
+          } else {
+            targetLine = kLine - 1;
           }
         }
       }
@@ -2490,7 +2525,7 @@ Queue --> MS_Pay : Procesar cobro`
       }
       abortController = new AbortController();
 
-      const { payload, startLine1, injectedCount } = getPayloadForRender(code);
+      const { payload, hasStartUml, startIdx0, injectedCount } = getPayloadForRender(code);
 
       try {
         const res = await fetch('https://kroki.io/plantuml/svg', {
@@ -2502,7 +2537,7 @@ Queue --> MS_Pay : Procesar cobro`
 
         if (!res.ok) {
           const errorMsg = await res.text();
-          const diagnosis = diagnosePlantUMLError(code, errorMsg, startLine1, injectedCount);
+          const diagnosis = diagnosePlantUMLError(code, errorMsg, hasStartUml, startIdx0, injectedCount);
           showDetailedError(diagnosis);
           return;
         }
@@ -2521,7 +2556,7 @@ Queue --> MS_Pay : Procesar cobro`
         statusLeft.style.color = "#34d399";
       } catch (err) {
         if (err.name === 'AbortError') return;
-        const diagnosis = diagnosePlantUMLError(code, err.message || "Error", startLine1, injectedCount);
+        const diagnosis = diagnosePlantUMLError(code, err.message || "Error", hasStartUml, startIdx0, injectedCount);
         showDetailedError(diagnosis);
       }
     }
@@ -2671,11 +2706,14 @@ Queue --> MS_Pay : Procesar cobro`
       // Responsive inicial según tamaño de pantalla
       if (window.innerWidth <= 860) {
         setMobileView('editor');
+      } else {
+        workspace.className = 'workspace';
       }
     };
 
     window.addEventListener('resize', () => {
       if (window.innerWidth > 860) {
+        workspace.className = 'workspace';
         fabPreviewBtn.style.display = 'none';
         fabEditorBtn.style.display = 'none';
       } else {
