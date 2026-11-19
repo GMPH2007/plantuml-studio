@@ -2280,6 +2280,8 @@ Queue --> MS_Pay : Procesar cobro`
     const VALID_START_REGEX = /^(skinparam|actor|participant|database|boundary|control|entity|collections|queue|title|right\s+footer|left\s+footer|footer|endfooter|header|endheader|autonumber|scale|alt|else|opt|loop|group|end|ref|note|end\s*note|class|interface|enum|package|node|folder|frame|cloud|database|storage|artifact|usecase|rectangle|state|start|stop|if|else|elseif|endif|while|endwhile|repeat|backward|fork|split|detach|@startuml|@enduml|!theme|'|\/')(?:\b|[\s{:])/i;
     const ARROW_REGEX = /^[\w"().\s]+(-->|->|<-|<--|\.\.>|<\.\.|==|===)[\w"().\s]+/i;
 
+    const COMMON_PARTICIPANTS = ['User', 'Usuario', 'Editor', 'Engine', 'Motor', 'App', 'Servidor', 'BD', 'Database', 'Cliente', 'API'];
+
     function diagnoseAllCodeErrors(code, serverMsg = "", serverLine = 0) {
       const lines = code.split('\n');
       const errors = [];
@@ -2309,6 +2311,41 @@ Queue --> MS_Pay : Procesar cobro`
       const isActivity = lines.some(l => {
         const t = l.trim();
         return t === 'start' || t === 'stop' || t === 'detach' || (t.startsWith(':') && t.endsWith(';'));
+      });
+
+      const openBlocks = {
+        footer: [],
+        header: [],
+        note: [],
+        if: [],
+        while: [],
+        fork: [],
+        seq: [],
+        brace: []
+      };
+
+      const declaredParticipants = new Set(COMMON_PARTICIPANTS);
+      let hasExplicitDeclarations = false;
+
+      // Primer barrido: registrar declaraciones explícitas y apertura de bloques
+      lines.forEach((l, idx) => {
+        const t = l.trim();
+        if (!t || t.startsWith("'")) return;
+
+        const declMatch = t.match(/^(actor|participant|database|boundary|control|entity|collections|queue)\s+(?:".*?"\s+as\s+)?([A-Za-z0-9_]+)/i);
+        if (declMatch) {
+          declaredParticipants.add(declMatch[2]);
+          hasExplicitDeclarations = true;
+        }
+
+        if (/^(right\s+footer|left\s+footer|footer)\b/i.test(t)) openBlocks.footer.push(idx + 1);
+        else if (/^(header|right\s+header|left\s+header)\b/i.test(t)) openBlocks.header.push(idx + 1);
+        else if (/^note\s+(left|right|over|bottom|top)\b/i.test(t) && !t.includes(':') && !t.includes('end note')) openBlocks.note.push(idx + 1);
+        else if (/^if\s*\([^)]*\)\s*then/i.test(t)) openBlocks.if.push(idx + 1);
+        else if (/^while\s*\(/i.test(t)) openBlocks.while.push(idx + 1);
+        else if (/^fork$/i.test(t)) openBlocks.fork.push(idx + 1);
+        else if (/^(alt|opt|loop|group|critical)\b/i.test(t)) openBlocks.seq.push(idx + 1);
+        else if (/^class\s+.*\{\s*$/i.test(t) || /^package\s+.*\{\s*$/i.test(t)) openBlocks.brace.push(idx + 1);
       });
 
       const blockStack = [];
@@ -2341,7 +2378,46 @@ Queue --> MS_Pay : Procesar cobro`
           continue;
         }
 
-        // 2. Detección de comilla doble sin cerrar (número impar de comillas)
+        // 2. Detección de directivas de cierre huérfanas (endfooter, endheader, etc.)
+        if (/^endfooter\b/i.test(trimmed)) {
+          if (openBlocks.footer.length > 0) {
+            openBlocks.footer.pop();
+          } else {
+            let fixedBlock = `title Sistema PlantUML Studio\nright footer\nDesarrollado por: GMPH2007\nDocente: Ing. Javier Eduardo Jaramillo Atoche\nGitHub: https://github.com/GMPH2007/plantuml-studio\nendfooter`;
+            if (!hasExplicitDeclarations) {
+              fixedBlock += `\n\nactor "Tú (Usuario)" as User\nparticipant "Editor en Vivo" as Editor\nparticipant "Renderizador" as Engine`;
+            }
+            errors.push({
+              line: lineNum,
+              type: 'orphan_endfooter',
+              original: rawLine,
+              fixed: fixedBlock,
+              title: 'endfooter huérfano sin inicio de pie de página',
+              problem: `En la <b>Línea ${lineNum}</b> escribiste <code>endfooter</code> sin haber abierto previamente el pie de página (<code>right footer</code>). Esto produce un error de sintaxis en el compilador.`,
+              solution: `Restaurar el bloque completo con el pie de página institucional del proyecto y los participantes.`
+            });
+            continue;
+          }
+        }
+
+        if (/^endheader\b/i.test(trimmed)) {
+          if (openBlocks.header.length > 0) {
+            openBlocks.header.pop();
+          } else {
+            errors.push({
+              line: lineNum,
+              type: 'orphan_endheader',
+              original: rawLine,
+              fixed: `header\nSistema PlantUML Studio\nendheader`,
+              title: 'endheader huérfano sin encabezado previo',
+              problem: `En la <b>Línea ${lineNum}</b> hay un <code>endheader</code> sin bloque de encabezado previo.`,
+              solution: `Restaurar el bloque de encabezado completo.`
+            });
+            continue;
+          }
+        }
+
+        // 3. Detección de comilla doble sin cerrar (número impar de comillas)
         const quoteCount = (trimmed.match(/"/g) || []).length;
         if (quoteCount % 2 !== 0) {
           let fixed = trimmed;
@@ -2362,7 +2438,7 @@ Queue --> MS_Pay : Procesar cobro`
           continue;
         }
 
-        // 3. Seguimiento de bloques para validación de cierre
+        // 4. Seguimiento de bloques para validación de cierre
         if (/^if\s*\([^)]*\)\s*then/i.test(trimmed)) blockStack.push({ type: 'if', line: lineNum, text: trimmed });
         else if (/^while\s*\(/i.test(trimmed)) blockStack.push({ type: 'while', line: lineNum, text: trimmed });
         else if (/^fork$/i.test(trimmed)) blockStack.push({ type: 'fork', line: lineNum, text: trimmed });
@@ -2379,7 +2455,7 @@ Queue --> MS_Pay : Procesar cobro`
         else if (trimmed === '}') { if (blockStack.length && blockStack[blockStack.length - 1].type === 'brace') blockStack.pop(); }
         else if (/^end\s*note\b/i.test(trimmed)) { if (blockStack.length && blockStack[blockStack.length - 1].type === 'note') blockStack.pop(); }
 
-        // 4. Flechas con espacios accidentales: ej. User - > Editor
+        // 5. Flechas con espacios accidentales: ej. User - > Editor
         if (/^[\w"().\s]+\s+(--?|\.\.?|==?)\s+>\s+[\w"().\s]+/i.test(trimmed)) {
           const fixed = trimmed.replace(/\s+(--?|\.\.?|==?)\s+>\s+/g, ' $1> ');
           errors.push({
@@ -2394,12 +2470,52 @@ Queue --> MS_Pay : Procesar cobro`
           continue;
         }
 
-        // Flecha válida
+        // 6. Flechas y verificación de errores tipográficos en nombres de participantes
+        const ARROW_LINE_REGEX = /^\s*([A-Za-z0-9_]+)\s*(-->|->|<-|<--|\.\.>|<\.\.|==|===)\s*([A-Za-z0-9_]+)\s*(:\s*.*)?$/;
+        const arrowMatch = trimmed.match(ARROW_LINE_REGEX);
+        if (arrowMatch) {
+          const from = arrowMatch[1];
+          const arrow = arrowMatch[2];
+          const to = arrowMatch[3];
+          const msg = arrowMatch[4] || '';
+
+          let fixedFrom = from;
+          let fixedTo = to;
+
+          for (const p of declaredParticipants) {
+            if (from !== p && levenshtein(from, p) <= 2 && Math.abs(from.length - p.length) <= 2) {
+              fixedFrom = p;
+            }
+            if (to !== p && levenshtein(to, p) <= 2 && Math.abs(to.length - p.length) <= 2) {
+              fixedTo = p;
+            }
+          }
+
+          if (fixedFrom !== from || fixedTo !== to) {
+            const typoWord = fixedFrom !== from ? from : to;
+            const correctWord = fixedFrom !== from ? fixedFrom : fixedTo;
+            const fixedLine = `${fixedFrom} ${arrow} ${fixedTo}${msg}`;
+            errors.push({
+              line: lineNum,
+              type: 'participant_typo',
+              original: rawLine,
+              fixed: fixedLine,
+              typoWord: typoWord,
+              correctWord: correctWord,
+              title: `Error en participante (${typoWord} ➔ ${correctWord})`,
+              problem: `En la <b>Línea ${lineNum}</b> escribiste <code>${escapeHtml(typoWord)}</code>.<br>El nombre correcto del participante es <code>${escapeHtml(correctWord)}</code>.`,
+              solution: `Corregir el nombre del participante a <code>${escapeHtml(correctWord)}</code>: <code>${escapeHtml(fixedLine)}</code>`
+            });
+            continue;
+          }
+          continue;
+        }
+
         if (ARROW_REGEX.test(trimmed)) {
           continue;
         }
 
-        // 5. Estilos huérfanos sin la palabra clave skinparam
+        // 7. Estilos huérfanos sin la palabra clave skinparam
         if (ORPHAN_STYLE_REGEX.test(trimmed)) {
           const fixed = `skinparam ${trimmed}`;
           errors.push({
@@ -2414,7 +2530,7 @@ Queue --> MS_Pay : Procesar cobro`
           continue;
         }
 
-        // 6. Detección y corrección de error tipográfico en la primera palabra clave
+        // 8. Detección y corrección de error tipográfico en la primera palabra clave
         const parts = trimmed.split(/\s+/);
         const firstWord = parts[0];
         const rest = parts.slice(1).join(' ');
@@ -2436,7 +2552,7 @@ Queue --> MS_Pay : Procesar cobro`
           continue;
         }
 
-        // 7. Formateo de acciones en diagrama de actividades
+        // 9. Formateo de acciones en diagrama de actividades
         if (isActivity && !trimmed.startsWith(':') && !trimmed.endsWith(';')) {
           const isControl = /^(start|stop|detach|else|elseif|endif|while|endwhile|fork|fork\s+again|end\s*fork|repeat|repeat\s+while|note|end\s*note)\b/i.test(trimmed) || /^if\s*\(/i.test(trimmed);
           if (!isControl && !VALID_START_REGEX.test(trimmed)) {
@@ -2456,7 +2572,7 @@ Queue --> MS_Pay : Procesar cobro`
         }
       }
 
-      // 8. Bloques sin cerrar
+      // 10. Bloques sin cerrar
       if (blockStack.length > 0) {
         const unclosed = blockStack[blockStack.length - 1];
         const closerMap = {
@@ -2479,46 +2595,71 @@ Queue --> MS_Pay : Procesar cobro`
         });
       }
 
-      // 9. Si el motor de Kroki reportó una línea de error y el linter no la atrapó
+      // 11. Si el motor de Kroki reportó una línea de error y el linter no la atrapó
       if (errors.length === 0 && serverLine > 0 && serverLine <= lines.length) {
-        const candidateLines = [serverLine, serverLine + 1, serverLine - 1].filter(l => l >= 1 && l <= lines.length);
-        let foundCandidate = false;
-
-        for (const cLine of candidateLines) {
-          const cText = lines[cLine - 1].trim();
-          const parts = cText.split(/\s+/);
-          const firstWord = parts[0];
-          const bestKw = findBestKeywordMatch(firstWord);
-          if (bestKw && bestKw.toLowerCase() !== firstWord.toLowerCase()) {
-            const rest = parts.slice(1).join(' ');
-            const fixed = rest ? `${bestKw} ${rest}` : bestKw;
-            errors.push({
-              line: cLine,
-              type: 'keyword_typo',
-              original: lines[cLine - 1],
-              fixed: fixed,
-              firstWord: firstWord,
-              bestKw: bestKw,
-              title: `Palabra clave mal escrita (${firstWord} ➔ ${bestKw})`,
-              problem: `El compilador detectó un error cerca de la <b>Línea ${serverLine}</b> originado en la <b>Línea ${cLine}</b> con la palabra <code>${escapeHtml(firstWord)}</code>.<br>La instrucción correcta es <code>${escapeHtml(bestKw)}</code>.`,
-              solution: `Cambiar <code>${escapeHtml(firstWord)}</code> por <code>${escapeHtml(bestKw)}</code>: <code>${escapeHtml(fixed)}</code>`
-            });
-            foundCandidate = true;
-            break;
+        // Si el motor reportó error en las líneas 1-3, buscar orphan endfooter en las primeras 5 líneas
+        if (serverLine <= 3) {
+          for (let k = 0; k < Math.min(5, lines.length); k++) {
+            const kl = lines[k].trim();
+            if (/^endfooter\b/i.test(kl)) {
+              let fixedBlock = `title Sistema PlantUML Studio\nright footer\nDesarrollado por: GMPH2007\nDocente: Ing. Javier Eduardo Jaramillo Atoche\nGitHub: https://github.com/GMPH2007/plantuml-studio\nendfooter`;
+              if (!hasExplicitDeclarations) {
+                fixedBlock += `\n\nactor "Tú (Usuario)" as User\nparticipant "Editor en Vivo" as Editor\nparticipant "Renderizador" as Engine`;
+              }
+              errors.push({
+                line: k + 1,
+                type: 'orphan_endfooter',
+                original: lines[k],
+                fixed: fixedBlock,
+                title: 'endfooter huérfano sin inicio de pie de página',
+                problem: `En la <b>Línea ${k + 1}</b> escribiste <code>endfooter</code> sin haber abierto el bloque <code>right footer</code>. Esto causa que el compilador falle en la inicialización.`,
+                solution: `Restaurar el bloque completo con el pie de página institucional del proyecto y los participantes.`
+              });
+              break;
+            }
           }
         }
 
-        if (!foundCandidate) {
-          const badSnippet = lines[serverLine - 1] || '';
-          errors.push({
-            line: serverLine,
-            type: 'server_reported',
-            original: badSnippet,
-            fixed: badSnippet,
-            title: `Error sintáctico en Línea ${serverLine}`,
-            problem: `Error reportado por el motor en la <b>Línea ${serverLine}</b>:<br><code>${escapeHtml(badSnippet)}</code>`,
-            solution: `Haz clic en 'Ir a la Línea ${serverLine}' para revisar comillas dobles, nombres de participantes o flechas (->).`
-          });
+        if (errors.length === 0) {
+          const candidateLines = [serverLine, serverLine + 1, serverLine - 1].filter(l => l >= 1 && l <= lines.length);
+          let foundCandidate = false;
+
+          for (const cLine of candidateLines) {
+            const cText = lines[cLine - 1].trim();
+            const parts = cText.split(/\s+/);
+            const firstWord = parts[0];
+            const bestKw = findBestKeywordMatch(firstWord);
+            if (bestKw && bestKw.toLowerCase() !== firstWord.toLowerCase()) {
+              const rest = parts.slice(1).join(' ');
+              const fixed = rest ? `${bestKw} ${rest}` : bestKw;
+              errors.push({
+                line: cLine,
+                type: 'keyword_typo',
+                original: lines[cLine - 1],
+                fixed: fixed,
+                firstWord: firstWord,
+                bestKw: bestKw,
+                title: `Palabra clave mal escrita (${firstWord} ➔ ${bestKw})`,
+                problem: `El compilador detectó un error cerca de la <b>Línea ${serverLine}</b> originado en la <b>Línea ${cLine}</b> con la palabra <code>${escapeHtml(firstWord)}</code>.<br>La instrucción correcta es <code>${escapeHtml(bestKw)}</code>.`,
+                solution: `Cambiar <code>${escapeHtml(firstWord)}</code> por <code>${escapeHtml(bestKw)}</code>: <code>${escapeHtml(fixed)}</code>`
+              });
+              foundCandidate = true;
+              break;
+            }
+          }
+
+          if (!foundCandidate) {
+            const badSnippet = lines[serverLine - 1] || '';
+            errors.push({
+              line: serverLine,
+              type: 'server_reported',
+              original: badSnippet,
+              fixed: badSnippet,
+              title: `Error sintáctico en Línea ${serverLine}`,
+              problem: `Error reportado por el motor en la <b>Línea ${serverLine}</b>:<br><code>${escapeHtml(badSnippet)}</code>`,
+              solution: `Haz clic en 'Ir a la Línea ${serverLine}' para revisar comillas dobles, nombres de participantes o flechas (->).`
+            });
+          }
         }
       }
 
