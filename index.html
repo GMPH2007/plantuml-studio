@@ -578,12 +578,33 @@
       height: 22px;
       padding-right: 4px;
       border-radius: 3px;
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.15s, color 0.15s, transform 0.15s;
+    }
+
+    .gutter-num:hover {
+      background: rgba(255, 255, 255, 0.15);
+      color: #38bdf8;
     }
 
     .gutter-num.error-active {
       background: #ef4444 !important;
       color: #ffffff !important;
       font-weight: bold;
+      box-shadow: 0 0 8px rgba(239, 68, 68, 0.7);
+    }
+
+    @keyframes lineGlow {
+      0% { background: #ef4444; color: #fff; transform: scale(1.15); box-shadow: 0 0 14px #ef4444; }
+      50% { background: #38bdf8; color: #fff; transform: scale(1.1); box-shadow: 0 0 10px #38bdf8; }
+      100% { background: transparent; transform: scale(1); }
+    }
+
+    .gutter-highlight-pulse {
+      animation: lineGlow 1.8s ease-out;
+      border-radius: 4px;
+      font-weight: 800 !important;
     }
 
     textarea#editor {
@@ -679,30 +700,63 @@
       font-weight: 600;
     }
 
-    /* ALERTA FLOTANTE EN EDITOR MÓVIL */
+    /* ALERTA FLOTANTE INTERACTIVA EN EDITOR (ESCRITORIO Y MÓVIL) */
     .mobile-error-toast {
       display: none;
-      background: #ef4444;
+      background: linear-gradient(90deg, #dc2626 0%, #b91c1c 100%);
       color: white;
-      padding: 8px 12px;
-      font-size: 0.82rem;
+      padding: 9px 14px;
+      font-size: 0.85rem;
       font-weight: 600;
       justify-content: space-between;
       align-items: center;
+      box-shadow: 0 4px 14px rgba(220, 38, 38, 0.45);
+      border-radius: 8px 8px 0 0;
+      gap: 10px;
+      flex-wrap: wrap;
+      z-index: 5;
+    }
+
+    .mobile-error-toast .btn-toast-action {
+      background: rgba(255, 255, 255, 0.18);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      color: #ffffff;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.76rem;
+      font-weight: 700;
       cursor: pointer;
-      box-shadow: 0 2px 8px rgba(239, 68, 68, 0.4);
+      transition: background 0.15s, transform 0.15s;
+    }
+
+    .mobile-error-toast .btn-toast-action:hover {
+      background: rgba(255, 255, 255, 0.32);
+      transform: translateY(-1px);
     }
 
     .error-card {
-      background: #ffffff;
-      border: 2px solid #ef4444;
-      border-radius: 12px;
-      padding: 18px;
-      max-width: 580px;
+      background: #111827;
+      border: 1.5px solid #ef4444;
+      border-radius: 14px;
+      padding: 20px;
+      max-width: 620px;
       width: 100%;
       text-align: left;
-      box-shadow: 0 10px 25px rgba(239, 68, 68, 0.18);
+      box-shadow: 0 14px 35px rgba(0, 0, 0, 0.65), 0 0 25px rgba(239, 68, 68, 0.25);
+      color: #f1f5f9;
+      animation: fadeInCard 0.25s ease-out;
+    }
+
+    body.light-mode .error-card {
+      background: #ffffff;
+      border: 2px solid #ef4444;
+      box-shadow: 0 14px 35px rgba(239, 68, 68, 0.2);
       color: #0f172a;
+    }
+
+    @keyframes fadeInCard {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     .error-title-row {
@@ -710,64 +764,155 @@
       align-items: center;
       justify-content: space-between;
       margin-bottom: 12px;
-      border-bottom: 1px solid #fee2e2;
-      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(239, 68, 68, 0.25);
+      padding-bottom: 10px;
+      flex-wrap: wrap;
+      gap: 8px;
     }
 
     .error-badge {
+      background: rgba(239, 68, 68, 0.2);
+      color: #fca5a5;
+      font-weight: 800;
+      font-size: 0.85rem;
+      padding: 4px 10px;
+      border-radius: 6px;
+      border: 1px solid rgba(239, 68, 68, 0.4);
+    }
+
+    body.light-mode .error-badge {
       background: #fee2e2;
       color: #dc2626;
-      font-weight: 800;
-      font-size: 0.82rem;
-      padding: 3px 8px;
-      border-radius: 6px;
+      border-color: #fca5a5;
     }
 
     .error-lines-badge {
       background: #ef4444;
       color: white;
-      font-size: 0.8rem;
-      padding: 3px 8px;
+      font-size: 0.82rem;
+      padding: 4px 10px;
       border-radius: 6px;
       font-weight: 700;
+      box-shadow: 0 2px 8px rgba(239, 68, 68, 0.4);
     }
 
     .error-label {
       font-size: 0.78rem;
       text-transform: uppercase;
-      font-weight: 700;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      color: #94a3b8;
+      margin-top: 12px;
+      margin-bottom: 6px;
+    }
+
+    body.light-mode .error-label {
       color: #475569;
-      margin-top: 10px;
-      margin-bottom: 4px;
     }
 
     .error-text {
-      font-size: 0.9rem;
-      color: #1e293b;
-      line-height: 1.45;
-      background: #f8fafc;
-      padding: 10px 12px;
+      font-size: 0.92rem;
+      color: #e2e8f0;
+      line-height: 1.5;
+      background: #1e293b;
+      padding: 11px 14px;
       border-radius: 8px;
       border-left: 4px solid #ef4444;
-      margin-bottom: 8px;
+      margin-bottom: 10px;
     }
+
+    body.light-mode .error-text {
+      background: #f8fafc;
+      color: #1e293b;
+    }
+
+    .error-diff-box {
+      background: #090d16;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 8px;
+      padding: 12px;
+      margin: 10px 0;
+      font-family: "Cascadia Code", Consolas, monospace;
+      font-size: 0.86rem;
+    }
+
+    body.light-mode .error-diff-box {
+      background: #f8fafc;
+      border-color: #cbd5e1;
+    }
+
+    .diff-original {
+      color: #fca5a5;
+      background: rgba(239, 68, 68, 0.15);
+      padding: 8px 12px;
+      border-radius: 6px;
+      border-left: 3px solid #ef4444;
+      margin-bottom: 6px;
+      word-break: break-all;
+    }
+
+    body.light-mode .diff-original {
+      color: #991b1b;
+      background: #fee2e2;
+    }
+
+    .diff-arrow {
+      font-size: 0.78rem;
+      color: #94a3b8;
+      margin: 5px 0 5px 6px;
+      font-weight: 700;
+    }
+
+    .diff-fixed {
+      color: #86efac;
+      background: rgba(16, 185, 129, 0.15);
+      padding: 8px 12px;
+      border-radius: 6px;
+      border-left: 3px solid #10b981;
+      word-break: break-all;
+    }
+
+    body.light-mode .diff-fixed {
+      color: #166534;
+      background: #dcfce7;
+    }
+
+    .diff-tag {
+      font-size: 0.72rem;
+      font-weight: 800;
+      display: block;
+      margin-bottom: 3px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .diff-tag-err { color: #f87171; }
+    .diff-tag-ok { color: #34d399; }
+    body.light-mode .diff-tag-err { color: #dc2626; }
+    body.light-mode .diff-tag-ok { color: #16a34a; }
 
     .error-code-box {
       font-family: "Cascadia Code", Consolas, monospace;
       font-size: 0.85rem;
-      background: #0f172a;
+      background: #090d16;
       color: #fca5a5;
       padding: 10px 12px;
       border-radius: 8px;
       margin: 6px 0 10px 0;
       white-space: pre-wrap;
-      border: 1px solid #7f1d1d;
+      border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+
+    .error-actions-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
     }
 
     .btn-fix {
-      margin-top: 12px;
-      width: 100%;
-      background: #16a34a;
+      flex: 1 1 200px;
+      background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
       color: #ffffff;
       border: none;
       padding: 12px 16px;
@@ -779,12 +924,63 @@
       justify-content: center;
       align-items: center;
       gap: 8px;
-      box-shadow: 0 4px 12px rgba(22, 163, 74, 0.3);
-      transition: background 0.15s;
+      box-shadow: 0 4px 14px rgba(22, 163, 74, 0.35);
+      transition: all 0.15s ease;
     }
 
     .btn-fix:hover {
-      background: #15803d;
+      background: linear-gradient(135deg, #15803d 0%, #166534 100%);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba(22, 163, 74, 0.5);
+    }
+
+    .btn-goto {
+      flex: 0 1 auto;
+      background: #0284c7;
+      color: #ffffff;
+      border: none;
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-size: 0.92rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 14px rgba(2, 132, 199, 0.35);
+      transition: all 0.15s ease;
+    }
+
+    .btn-goto:hover {
+      background: #0369a1;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba(2, 132, 199, 0.5);
+    }
+
+    .btn-fix-all {
+      width: 100%;
+      margin-top: 10px;
+      background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%);
+      color: #ffffff;
+      border: none;
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-size: 0.92rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 14px rgba(139, 92, 246, 0.35);
+      transition: all 0.15s ease;
+    }
+
+    .btn-fix-all:hover {
+      background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba(139, 92, 246, 0.5);
     }
 
     /* === RESPONSIVE PARA CELULARES Y TABLETS === */
@@ -1214,10 +1410,15 @@
         <span class="snippet-chip" onclick="insertSnippet('decision')">🔀 Decisión (if/then)</span>
       </div>
 
-      <!-- AVISO DE ERROR FLOTANTE PARA CELULAR EN MODO EDITOR -->
-      <div class="mobile-error-toast" id="mobile-error-toast" onclick="setMobileView('preview')">
-        <span id="mobile-toast-text">⚠️ Error de sintaxis detectado</span>
-        <span style="text-decoration: underline; font-size: 0.75rem;">Toca para corregir &gt;</span>
+      <!-- AVISO DE ERROR INTERACTIVO EN TIEMPO REAL -->
+      <div class="mobile-error-toast" id="mobile-error-toast">
+        <div style="display: flex; align-items: center; gap: 8px; flex: 1 1 auto; overflow: hidden;">
+          <span id="mobile-toast-text" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">⚠️ Error de sintaxis detectado</span>
+        </div>
+        <div style="display: flex; gap: 6px; align-items: center; flex-shrink: 0;">
+          <button class="btn-toast-action" id="btn-toast-goto" onclick="goToCurrentErrorLine()">🎯 Ir a la Línea</button>
+          <button class="btn-toast-action" id="btn-toast-fix" onclick="executeAutoFix()" style="background: #16a34a; border-color: #22c55e;">⚡ Corregir</button>
+        </div>
       </div>
 
       <!-- EDITOR CON NÚMEROS DE LÍNEA -->
@@ -1355,10 +1556,55 @@
       let gutterHtml = '';
       for (let i = 1; i <= count; i++) {
         const isErr = activeErrorLines.has(i);
-        gutterHtml += `<span class="gutter-num ${isErr ? 'error-active' : ''}">${i}</span>`;
+        gutterHtml += `<span class="gutter-num ${isErr ? 'error-active' : ''}" id="gutter-line-${i}" onclick="goToLine(${i})" title="Clic para ir a la Línea ${i}">${i}</span>`;
       }
       gutter.innerHTML = gutterHtml;
       counter.textContent = `${editor.value.length} car. • ${count} lín.`;
+    }
+
+    function goToLine(lineNum) {
+      if (!lineNum || lineNum < 1) lineNum = 1;
+      const lines = editor.value.split('\n');
+      if (lineNum > lines.length) lineNum = lines.length;
+
+      // Si estamos en celular y en vista previa, cambiar al editor
+      if (window.innerWidth <= 868 && typeof setMobileView === 'function') {
+        setMobileView('editor');
+      }
+
+      let charStart = 0;
+      for (let i = 0; i < lineNum - 1; i++) {
+        charStart += lines[i].length + 1;
+      }
+      const lineLength = lines[lineNum - 1] ? lines[lineNum - 1].length : 0;
+      const charEnd = charStart + lineLength;
+
+      editor.focus();
+      editor.setSelectionRange(charStart, charEnd);
+
+      const approxLineHeight = 22;
+      const targetScrollTop = Math.max(0, (lineNum - 1) * approxLineHeight - (editor.clientHeight / 2) + approxLineHeight);
+      editor.scrollTo({ top: targetScrollTop, behavior: 'smooth' });
+      gutter.scrollTop = editor.scrollTop;
+
+      highlightGutterLine(lineNum);
+    }
+
+    function goToCurrentErrorLine() {
+      if (currentErrors && currentErrors.length > 0) {
+        goToLine(currentErrors[0].line);
+      } else if (currentErrorDiagnosis && currentErrorDiagnosis.line) {
+        goToLine(currentErrorDiagnosis.line);
+      }
+    }
+
+    function highlightGutterLine(lineNum) {
+      const el = document.getElementById(`gutter-line-${lineNum}`);
+      if (el) {
+        el.classList.remove('gutter-highlight-pulse');
+        void el.offsetWidth;
+        el.classList.add('gutter-highlight-pulse');
+      }
     }
 
     editor.addEventListener('scroll', () => {
@@ -1853,7 +2099,7 @@ Queue --> MS_Pay : Procesar cobro`
       applyTheme(DEFAULT_BODY, document.getElementById('diagram-theme-select').value);
     }
 
-    const ORPHAN_STYLE_REGEX = /^(title(FontSize|FontColor|FontStyle)|roundcorner|shadowing|defaultFont\w*|Arrow\w*|Actor\w*|Participant\w*|Database\w*|Alt\w*|Activity\w*|Class\w*|Package\w*|Usecase\w*|Rectangle\w*|Component\w*|Interface\w*|Cloud\w*|Queue\w*|State\w*|Sequence\w*|Note\w*|footerFont\w*)\s+/i;
+    const ORPHAN_STYLE_REGEX = /^((title|defaultFont|footerFont)(FontSize|FontColor|FontStyle|Name)|roundcorner|shadowing|Arrow(Color|Thickness|FontSize|FontColor)|(Actor|Participant|Database|Alt|Activity|Class|Package|Usecase|Rectangle|Component|Interface|Cloud|Queue|State|Sequence|Note)(BackgroundColor|BorderColor|FontColor|FontSize|FontStyle|BorderThickness))\s+/i;
 
     function cleanCodeStyles(code) {
       const lines = code.split('\n');
@@ -1892,191 +2138,400 @@ Queue --> MS_Pay : Procesar cobro`
       }
     }
 
+    let currentErrors = [];
+
+    const COMMON_TYPOS = {
+      'partici8lpant': 'participant',
+      'partiyticipant': 'participant',
+      'partcipant': 'participant',
+      'particpant': 'participant',
+      'partisipant': 'participant',
+      'participante': 'participant',
+      'participates': 'participant',
+      'partic': 'participant',
+      'partici': 'participant',
+      'parcipant': 'participant',
+      'partcipante': 'participant',
+      'actro': 'actor',
+      'acotr': 'actor',
+      'actr': 'actor',
+      'ator': 'actor',
+      'actore': 'actor',
+      'actores': 'actor',
+      'acttor': 'actor',
+      'databaes': 'database',
+      'databse': 'database',
+      'basededatos': 'database',
+      'base_datos': 'database',
+      'basedatos': 'database',
+      'db': 'database',
+      'boundary': 'boundary',
+      'boundry': 'boundary',
+      'boundari': 'boundary',
+      'frontera': 'boundary',
+      'control': 'control',
+      'cntrol': 'control',
+      'contorl': 'control',
+      'controlador': 'control',
+      'entity': 'entity',
+      'entiy': 'entity',
+      'entidad': 'entity',
+      'collections': 'collections',
+      'colection': 'collections',
+      'collecion': 'collections',
+      'colecciones': 'collections',
+      'queue': 'queue',
+      'queu': 'queue',
+      'qeue': 'queue',
+      'coladeespera': 'queue',
+      'interfase': 'interface',
+      'intrface': 'interface',
+      'interfaz': 'interface',
+      'clas': 'class',
+      'clase': 'class',
+      'classes': 'class',
+      'rectangulo': 'rectangle',
+      'recatngle': 'rectangle',
+      'rectangule': 'rectangle',
+      'componet': 'component',
+      'componente': 'component',
+      'skinparm': 'skinparam',
+      'skinparamm': 'skinparam',
+      'skinpram': 'skinparam',
+      'skinprm': 'skinparam',
+      'skparam': 'skinparam',
+      'endfotter': 'endfooter',
+      'endfuuter': 'endfooter',
+      'end_footer': 'endfooter',
+      'autonum': 'autonumber',
+      'autonumbering': 'autonumber',
+      'auto_number': 'autonumber',
+      'endnote': 'end note',
+      'end_note': 'end note',
+      'end_if': 'endif',
+      'end-if': 'endif',
+      'end_while': 'endwhile',
+      'end_fork': 'end fork',
+      'titulo': 'title',
+      'tittle': 'title'
+    };
+
+    const KEYWORDS_LIST = [
+      'participant', 'actor', 'database', 'boundary', 'control', 'entity', 'collections', 'queue',
+      'class', 'interface', 'abstract', 'enum', 'package', 'node', 'folder', 'frame', 'cloud',
+      'storage', 'artifact', 'usecase', 'rectangle', 'state', 'component',
+      'skinparam', 'title', 'right footer', 'left footer', 'footer', 'endfooter', 'header', 'endheader',
+      'autonumber', 'scale', 'alt', 'else', 'opt', 'loop', 'group', 'end', 'ref', 'note',
+      'start', 'stop', 'if', 'then', 'else', 'elseif', 'endif', 'while', 'endwhile', 'repeat', 'backward', 'fork', 'split', 'detach'
+    ];
+
+    function levenshtein(a, b) {
+      if (a === b) return 0;
+      if (!a.length) return b.length;
+      if (!b.length) return a.length;
+      const matrix = [];
+      for (let i = 0; i <= b.length; i++) matrix[i] = [i];
+      for (let j = 0; j <= a.length; j++) matrix[0][j] = j;
+      for (let i = 1; i <= b.length; i++) {
+        for (let j = 1; j <= a.length; j++) {
+          if (b.charAt(i - 1).toLowerCase() === a.charAt(j - 1).toLowerCase()) {
+            matrix[i][j] = matrix[i - 1][j - 1];
+          } else {
+            matrix[i][j] = Math.min(
+              matrix[i - 1][j - 1] + 1,
+              matrix[i][j - 1] + 1,
+              matrix[i - 1][j] + 1
+            );
+          }
+        }
+      }
+      return matrix[b.length][a.length];
+    }
+
+    function findBestKeywordMatch(token) {
+      if (!token) return null;
+      const t = token.toLowerCase();
+
+      if (COMMON_TYPOS[t]) return COMMON_TYPOS[t];
+
+      if (/^parti[a-z0-9_]*pant$/i.test(t) || /^partic[a-z0-9_]{3,}$/i.test(t)) return 'participant';
+      if (/^ac?t[or]{2,}$/i.test(t)) return 'actor';
+      if (/^data[a-z0-9_]*base$/i.test(t)) return 'database';
+      if (/^interf[a-z0-9_]+$/i.test(t)) return 'interface';
+      if (/^clas[a-z0-9_]*$/i.test(t)) return 'class';
+      if (/^rect[a-z0-9_]+$/i.test(t)) return 'rectangle';
+      if (/^comp[a-z0-9_]+$/i.test(t)) return 'component';
+      if (/^sk[a-z0-9_]*param\w*$/i.test(t)) return 'skinparam';
+
+      let best = null;
+      let minD = 999;
+      for (const kw of KEYWORDS_LIST) {
+        if (kw.includes(' ')) continue;
+        const d = levenshtein(t, kw);
+        const maxD = kw.length >= 7 ? 3 : (kw.length >= 4 ? 2 : 1);
+        if (d <= maxD && d < minD) {
+          minD = d;
+          best = kw;
+        }
+      }
+      return best;
+    }
+
     const VALID_START_REGEX = /^(skinparam|actor|participant|database|boundary|control|entity|collections|queue|title|right\s+footer|left\s+footer|footer|endfooter|header|endheader|autonumber|scale|alt|else|opt|loop|group|end|ref|note|end\s*note|class|interface|enum|package|node|folder|frame|cloud|database|storage|artifact|usecase|rectangle|state|start|stop|if|else|elseif|endif|while|endwhile|repeat|backward|fork|split|detach|@startuml|@enduml|!theme|'|\/')(?:\b|[\s{:])/i;
     const ARROW_REGEX = /^[\w"().\s]+(-->|->|<-|<--|\.\.>|<\.\.|==|===)[\w"().\s]+/i;
 
-    function findExactCodeErrors(code, serverMsg, injectedLines = 0) {
+    function diagnoseAllCodeErrors(code, serverMsg = "", serverLine = 0) {
       const lines = code.split('\n');
-      const detectedBadLines = [];
+      const errors = [];
 
-      // 1. Detección de 'skinparam' partido en dos líneas
+      // Detección de 'skinparam' partido en dos líneas
       for (let i = 0; i < lines.length - 1; i++) {
         const t1 = lines[i].trim();
         const t2 = lines[i+1].trim();
         if (['sk', 'ski', 'skin', 'skinp', 'skinpa'].includes(t1.toLowerCase()) && /^(param|aram|ram|m)\b/i.test(t2)) {
           const splitLine1 = i + 1;
           const splitLine2 = i + 2;
-          return {
-            lines: [splitLine1, splitLine2],
-            problem: `Se presionó Enter en medio de la palabra <code>skinparam</code>:<br>
-              • Línea ${splitLine1}: <code>${escapeHtml(lines[splitLine1 - 1].trim())}</code><br>
-              • Línea ${splitLine2}: <code>${escapeHtml(lines[splitLine2 - 1].trim())}</code>`,
-            snippet: `${lines[splitLine1 - 1]}\n${lines[splitLine2 - 1]}`,
-            fixSolution: `Unir ambas líneas en la directiva correcta: <code>skinparam ...</code>`,
-            fixType: 'merge_split_skinparam',
-            targetLine1: splitLine1,
-            targetLine2: splitLine2
-          };
+          const line2Rest = t2.replace(/^(param|aram|ram|m)\s*/i, '');
+          const fixed = `skinparam ${line2Rest}`.trim();
+          errors.push({
+            line: splitLine1,
+            relatedLine: splitLine2,
+            type: 'merge_split_skinparam',
+            original: `${lines[splitLine1 - 1]}\n${lines[splitLine2 - 1]}`,
+            fixed: fixed,
+            title: 'Palabra skinparam dividida en dos líneas',
+            problem: `Se presionó Enter en medio de la instrucción <code>skinparam</code>:<br>• Línea ${splitLine1}: <code>${escapeHtml(t1)}</code><br>• Línea ${splitLine2}: <code>${escapeHtml(t2)}</code>`,
+            solution: `Unir ambas líneas en la directiva correcta: <code>${escapeHtml(fixed)}</code>`
+          });
         }
       }
 
-      // 2. Comprobación de bloques sin cerrar (if sin endif, alt sin end, loop sin end, class sin })
-      const blockStack = [];
-      const isActivityDiagram = lines.some(l => {
+      const isActivity = lines.some(l => {
         const t = l.trim();
         return t === 'start' || t === 'stop' || t === 'detach' || (t.startsWith(':') && t.endsWith(';'));
       });
 
+      const blockStack = [];
+
       for (let i = 0; i < lines.length; i++) {
-        const t = lines[i].trim();
-        if (!t || t.startsWith("'") || t.startsWith("/'") || t.startsWith("@") || t.startsWith("!")) continue;
+        const lineNum = i + 1;
+        const rawLine = lines[i];
+        const trimmed = rawLine.trim();
+        if (!trimmed) continue;
 
-        // Abrir bloques
-        if (/^if\s*\([^)]*\)\s*then/i.test(t)) {
-          blockStack.push({ type: 'if', line: i + 1, text: t });
-        } else if (/^while\s*\(/i.test(t)) {
-          blockStack.push({ type: 'while', line: i + 1, text: t });
-        } else if (/^fork$/i.test(t)) {
-          blockStack.push({ type: 'fork', line: i + 1, text: t });
-        } else if (/^repeat$/i.test(t)) {
-          blockStack.push({ type: 'repeat', line: i + 1, text: t });
-        } else if (/^(alt|opt|loop|group|critical)\b/i.test(t)) {
-          blockStack.push({ type: 'seq_block', line: i + 1, text: t });
-        } else if (/^class\s+.*\{\s*$/i.test(t) || /^package\s+.*\{\s*$/i.test(t) || /^state\s+.*\{\s*$/i.test(t)) {
-          blockStack.push({ type: 'brace', line: i + 1, text: t });
-        } else if (/^note\s+(left|right|over|bottom|top)\b/i.test(t) && !t.includes(':') && !t.includes('end note')) {
-          blockStack.push({ type: 'note', line: i + 1, text: t });
+        // 1. Detección de comillas de comentario accidentales (' ' ' actor ...)
+        const strayCommentMatch = trimmed.match(/^['\s]{2,}(actor|participant|database|boundary|control|entity|collections|queue|class|interface|rectangle|component|skinparam|title|start|stop|if|while|note|end)\b(.*)$/i) ||
+                                  trimmed.match(/^['\s]{2,}(.*(-->|->|<-|<--|\.\.>|<\.\.|==|===).*)$/i);
+        if (strayCommentMatch) {
+          const fixed = trimmed.replace(/^['\s]+/, '');
+          errors.push({
+            line: lineNum,
+            type: 'stray_comment',
+            original: rawLine,
+            fixed: fixed,
+            title: 'Comillas de comentario accidentales',
+            problem: `La <b>Línea ${lineNum}</b> tiene comillas de comentario repetidas (<code>' ' '</code>) antes de la instrucción.<br>Esto anula el elemento en el diagrama y rompe las conexiones.`,
+            solution: `Restaurar la instrucción activa sin comillas: <code>${escapeHtml(fixed)}</code>`
+          });
+          continue;
         }
 
-        // Cerrar bloques
-        if (/^(endif|end\s*if)\b/i.test(t)) {
-          if (blockStack.length && blockStack[blockStack.length - 1].type === 'if') blockStack.pop();
-        } else if (/^(endwhile|end\s*while)\b/i.test(t)) {
-          if (blockStack.length && blockStack[blockStack.length - 1].type === 'while') blockStack.pop();
-        } else if (/^(end\s*fork|endfork)\b/i.test(t)) {
-          if (blockStack.length && blockStack[blockStack.length - 1].type === 'fork') blockStack.pop();
-        } else if (/^repeat\s+while\b/i.test(t)) {
-          if (blockStack.length && blockStack[blockStack.length - 1].type === 'repeat') blockStack.pop();
-        } else if (/^end\b/i.test(t)) {
-          if (blockStack.length && blockStack[blockStack.length - 1].type === 'seq_block') blockStack.pop();
-        } else if (t === '}') {
-          if (blockStack.length && blockStack[blockStack.length - 1].type === 'brace') blockStack.pop();
-        } else if (/^end\s*note\b/i.test(t)) {
-          if (blockStack.length && blockStack[blockStack.length - 1].type === 'note') blockStack.pop();
+        // Si es comentario válido o directiva @ / !, ignorar
+        if ((trimmed.startsWith("'") && !trimmed.startsWith("' ' '")) || trimmed.startsWith("/'") || trimmed.startsWith("@") || trimmed.startsWith("!")) {
+          continue;
         }
 
-        // 3. Revisión minuciosa en Diagramas de Actividad: acciones sin ':' o ';'
-        if (isActivityDiagram && !t.startsWith(':') && !t.startsWith('skinparam') && !t.startsWith('title') && !t.startsWith('right') && !t.startsWith('left') && !t.startsWith('footer') && !t.startsWith('endfooter') && !t.startsWith('header')) {
-          const isControl = /^(start|stop|detach|else|elseif|endif|while|endwhile|fork|fork\s+again|end\s*fork|repeat|repeat\s+while|note|end\s*note)\b/i.test(t) || /^if\s*\(/i.test(t) || ARROW_REGEX.test(t);
-          if (!isControl && !VALID_START_REGEX.test(t)) {
-            return {
-              lines: [i + 1],
-              problem: `En la <b>Línea ${i + 1}</b> escribiste una acción de actividad sin la sintaxis correcta:<br><code>${escapeHtml(t)}</code><br><br><b>¿Por qué falla?</b> En PlantUML, los pasos de un flujograma deben iniciar con dos puntos <code>:</code> y terminar con punto y coma <code>;</code>.`,
-              snippet: t,
-              fixSolution: `Formatear como acción válida: <code>:${escapeHtml(t.replace(/^:+|;+$/g, '').trim())};</code>`,
-              fixType: 'activity_action_syntax',
-              targetLine: i + 1,
-              rawText: t
-            };
+        // 2. Detección de comilla doble sin cerrar (número impar de comillas)
+        const quoteCount = (trimmed.match(/"/g) || []).length;
+        if (quoteCount % 2 !== 0) {
+          let fixed = trimmed;
+          if (/\s+as\s+/i.test(trimmed)) {
+            fixed = trimmed.replace(/\s+as\s+/i, '" as ');
+          } else {
+            fixed = trimmed + '"';
+          }
+          errors.push({
+            line: lineNum,
+            type: 'unclosed_quote',
+            original: rawLine,
+            fixed: fixed,
+            title: 'Comilla doble sin cerrar',
+            problem: `En la <b>Línea ${lineNum}</b> hay una comilla doble <code>"</code> sin su correspondiente comilla de cierre.`,
+            solution: `Cerrar la comilla correctamente: <code>${escapeHtml(fixed)}</code>`
+          });
+          continue;
+        }
+
+        // 3. Seguimiento de bloques para validación de cierre
+        if (/^if\s*\([^)]*\)\s*then/i.test(trimmed)) blockStack.push({ type: 'if', line: lineNum, text: trimmed });
+        else if (/^while\s*\(/i.test(trimmed)) blockStack.push({ type: 'while', line: lineNum, text: trimmed });
+        else if (/^fork$/i.test(trimmed)) blockStack.push({ type: 'fork', line: lineNum, text: trimmed });
+        else if (/^repeat$/i.test(trimmed)) blockStack.push({ type: 'repeat', line: lineNum, text: trimmed });
+        else if (/^(alt|opt|loop|group|critical)\b/i.test(trimmed)) blockStack.push({ type: 'seq_block', line: lineNum, text: trimmed });
+        else if (/^class\s+.*\{\s*$/i.test(trimmed) || /^package\s+.*\{\s*$/i.test(trimmed) || /^state\s+.*\{\s*$/i.test(trimmed)) blockStack.push({ type: 'brace', line: lineNum, text: trimmed });
+        else if (/^note\s+(left|right|over|bottom|top)\b/i.test(trimmed) && !trimmed.includes(':') && !trimmed.includes('end note')) blockStack.push({ type: 'note', line: lineNum, text: trimmed });
+
+        if (/^(endif|end\s*if)\b/i.test(trimmed)) { if (blockStack.length && blockStack[blockStack.length - 1].type === 'if') blockStack.pop(); }
+        else if (/^(endwhile|end\s*while)\b/i.test(trimmed)) { if (blockStack.length && blockStack[blockStack.length - 1].type === 'while') blockStack.pop(); }
+        else if (/^(end\s*fork|endfork)\b/i.test(trimmed)) { if (blockStack.length && blockStack[blockStack.length - 1].type === 'fork') blockStack.pop(); }
+        else if (/^repeat\s+while\b/i.test(trimmed)) { if (blockStack.length && blockStack[blockStack.length - 1].type === 'repeat') blockStack.pop(); }
+        else if (/^end\b/i.test(trimmed)) { if (blockStack.length && blockStack[blockStack.length - 1].type === 'seq_block') blockStack.pop(); }
+        else if (trimmed === '}') { if (blockStack.length && blockStack[blockStack.length - 1].type === 'brace') blockStack.pop(); }
+        else if (/^end\s*note\b/i.test(trimmed)) { if (blockStack.length && blockStack[blockStack.length - 1].type === 'note') blockStack.pop(); }
+
+        // 4. Flechas con espacios accidentales: ej. User - > Editor
+        if (/^[\w"().\s]+\s+(--?|\.\.?|==?)\s+>\s+[\w"().\s]+/i.test(trimmed)) {
+          const fixed = trimmed.replace(/\s+(--?|\.\.?|==?)\s+>\s+/g, ' $1> ');
+          errors.push({
+            line: lineNum,
+            type: 'arrow_space',
+            original: rawLine,
+            fixed: fixed,
+            title: 'Espacio accidental dentro de la flecha',
+            problem: `En la <b>Línea ${lineNum}</b> la flecha contiene un espacio intermedio (ej: <code>- ></code>).`,
+            solution: `Unir la flecha en una sola instrucción continua: <code>${escapeHtml(fixed)}</code>`
+          });
+          continue;
+        }
+
+        // Flecha válida
+        if (ARROW_REGEX.test(trimmed)) {
+          continue;
+        }
+
+        // 5. Estilos huérfanos sin la palabra clave skinparam
+        if (ORPHAN_STYLE_REGEX.test(trimmed)) {
+          const fixed = `skinparam ${trimmed}`;
+          errors.push({
+            line: lineNum,
+            type: 'missing_skinparam',
+            original: rawLine,
+            fixed: fixed,
+            title: 'Falta la palabra clave skinparam',
+            problem: `En la <b>Línea ${lineNum}</b> definiste un estilo sin la directiva <code>skinparam</code>.`,
+            solution: `Agregar <code>skinparam</code> al inicio de la línea: <code>${escapeHtml(fixed)}</code>`
+          });
+          continue;
+        }
+
+        // 6. Detección y corrección de error tipográfico en la primera palabra clave
+        const parts = trimmed.split(/\s+/);
+        const firstWord = parts[0];
+        const rest = parts.slice(1).join(' ');
+
+        const bestKw = findBestKeywordMatch(firstWord);
+        if (bestKw && bestKw.toLowerCase() !== firstWord.toLowerCase()) {
+          const fixed = rest ? `${bestKw} ${rest}` : bestKw;
+          errors.push({
+            line: lineNum,
+            type: 'keyword_typo',
+            original: rawLine,
+            fixed: fixed,
+            firstWord: firstWord,
+            bestKw: bestKw,
+            title: `Palabra clave mal escrita (${firstWord} ➔ ${bestKw})`,
+            problem: `En la <b>Línea ${lineNum}</b> escribiste <code>${escapeHtml(firstWord)}</code>.<br>La instrucción correcta en PlantUML es <code>${escapeHtml(bestKw)}</code>.`,
+            solution: `Cambiar <code>${escapeHtml(firstWord)}</code> por <code>${escapeHtml(bestKw)}</code>: <code>${escapeHtml(fixed)}</code>`
+          });
+          continue;
+        }
+
+        // 7. Formateo de acciones en diagrama de actividades
+        if (isActivity && !trimmed.startsWith(':') && !trimmed.endsWith(';')) {
+          const isControl = /^(start|stop|detach|else|elseif|endif|while|endwhile|fork|fork\s+again|end\s*fork|repeat|repeat\s+while|note|end\s*note)\b/i.test(trimmed) || /^if\s*\(/i.test(trimmed);
+          if (!isControl && !VALID_START_REGEX.test(trimmed)) {
+            const clean = trimmed.replace(/^:+|;+$/g, '').trim();
+            const fixed = `:${clean};`;
+            errors.push({
+              line: lineNum,
+              type: 'activity_action_syntax',
+              original: rawLine,
+              fixed: fixed,
+              title: 'Acción de diagrama sin formatear',
+              problem: `En la <b>Línea ${lineNum}</b> las acciones de flujograma deben iniciar con <code>:</code> y terminar con <code>;</code>.`,
+              solution: `Envolver la acción: <code>${escapeHtml(fixed)}</code>`
+            });
+            continue;
           }
         }
       }
 
-      // Si quedó algún bloque abierto sin cerrar
+      // 8. Bloques sin cerrar
       if (blockStack.length > 0) {
         const unclosed = blockStack[blockStack.length - 1];
         const closerMap = {
           'if': { kw: 'endif', name: 'condicional if' },
           'while': { kw: 'endwhile (condición)', name: 'bucle while' },
-          'fork': { kw: 'end fork', name: 'bifurcación paralela fork' },
+          'fork': { kw: 'end fork', name: 'bloque fork' },
           'repeat': { kw: 'repeat while (condición)', name: 'repetición repeat' },
           'seq_block': { kw: 'end', name: 'bloque alt/opt/loop' },
           'brace': { kw: '}', name: 'llave de clase/paquete' },
           'note': { kw: 'end note', name: 'nota multilínea' }
         };
         const info = closerMap[unclosed.type] || { kw: 'end', name: 'bloque' };
-        return {
-          lines: [unclosed.line],
-          problem: `El <b>${info.name}</b> iniciado en la <b>Línea ${unclosed.line}</b> no fue cerrado:<br><code>${escapeHtml(unclosed.text)}</code>`,
-          snippet: unclosed.text,
-          fixSolution: `Agregar la instrucción de cierre al final del bloque: <code>${info.kw}</code>`,
-          fixType: 'close_unclosed_block',
-          targetLine: unclosed.line,
-          closerKw: info.kw
-        };
+        errors.push({
+          line: unclosed.line,
+          type: 'unclosed_block',
+          closerKw: info.kw,
+          title: 'Bloque sin cerrar',
+          problem: `El <b>${info.name}</b> abierto en la <b>Línea ${unclosed.line}</b> no tiene su instrucción de cierre correspondiente.`,
+          solution: `Agregar la instrucción de cierre al final del bloque: <code>${info.kw}</code>`
+        });
       }
 
-      // 4. Búsqueda de líneas no reconocidas o errores de tipografía
-      for (let i = 0; i < lines.length; i++) {
-        const trimmed = lines[i].trim();
-        if (!trimmed || trimmed.startsWith("'") || trimmed.startsWith("/'") || trimmed.startsWith("!theme")) {
-          continue;
+      // 9. Si el motor de Kroki reportó una línea de error y el linter no la atrapó
+      if (errors.length === 0 && serverLine > 0 && serverLine <= lines.length) {
+        const candidateLines = [serverLine, serverLine + 1, serverLine - 1].filter(l => l >= 1 && l <= lines.length);
+        let foundCandidate = false;
+
+        for (const cLine of candidateLines) {
+          const cText = lines[cLine - 1].trim();
+          const parts = cText.split(/\s+/);
+          const firstWord = parts[0];
+          const bestKw = findBestKeywordMatch(firstWord);
+          if (bestKw && bestKw.toLowerCase() !== firstWord.toLowerCase()) {
+            const rest = parts.slice(1).join(' ');
+            const fixed = rest ? `${bestKw} ${rest}` : bestKw;
+            errors.push({
+              line: cLine,
+              type: 'keyword_typo',
+              original: lines[cLine - 1],
+              fixed: fixed,
+              firstWord: firstWord,
+              bestKw: bestKw,
+              title: `Palabra clave mal escrita (${firstWord} ➔ ${bestKw})`,
+              problem: `El compilador detectó un error cerca de la <b>Línea ${serverLine}</b> originado en la <b>Línea ${cLine}</b> con la palabra <code>${escapeHtml(firstWord)}</code>.<br>La instrucción correcta es <code>${escapeHtml(bestKw)}</code>.`,
+              solution: `Cambiar <code>${escapeHtml(firstWord)}</code> por <code>${escapeHtml(bestKw)}</code>: <code>${escapeHtml(fixed)}</code>`
+            });
+            foundCandidate = true;
+            break;
+          }
         }
-        if (VALID_START_REGEX.test(trimmed) || ARROW_REGEX.test(trimmed) || trimmed.startsWith(':')) {
-          continue;
+
+        if (!foundCandidate) {
+          const badSnippet = lines[serverLine - 1] || '';
+          errors.push({
+            line: serverLine,
+            type: 'server_reported',
+            original: badSnippet,
+            fixed: badSnippet,
+            title: `Error sintáctico en Línea ${serverLine}`,
+            problem: `Error reportado por el motor en la <b>Línea ${serverLine}</b>:<br><code>${escapeHtml(badSnippet)}</code>`,
+            solution: `Haz clic en 'Ir a la Línea ${serverLine}' para revisar comillas dobles, nombres de participantes o flechas (->).`
+          });
         }
-        detectedBadLines.push(i + 1);
       }
 
-      if (detectedBadLines.length > 0) {
-        const firstBadIndex = detectedBadLines[0] - 1;
-        const badText = lines[firstBadIndex].trim();
+      return errors;
+    }
 
-        if (/^sk[a-z0-9_]*param/i.test(badText) || /^sk[a-z0-9_]{2,8}\b/i.test(badText)) {
-          return {
-            lines: detectedBadLines,
-            problem: `En la <b>Línea ${detectedBadLines[0]}</b> escribiste:<br><code>${escapeHtml(badText)}</code><br><br><b>¿Por qué falla?</b> Error al escribir la directiva <code>skinparam</code>.`,
-            snippet: badText,
-            fixSolution: `Corregir la palabra a <code>skinparam</code>.`,
-            fixType: 'typo_skinparam',
-            targetLine: detectedBadLines[0]
-          };
-        }
-
-        if (ORPHAN_STYLE_REGEX.test(badText)) {
-          return {
-            lines: detectedBadLines,
-            problem: `En la <b>Línea ${detectedBadLines[0]}</b> escribiste:<br><code>${escapeHtml(badText)}</code><br><br><b>¿Por qué falla?</b> Los estilos deben comenzar con la palabra clave <code>skinparam</code>.`,
-            snippet: badText,
-            fixSolution: `Agregar <code>skinparam</code> al inicio de la línea.`,
-            fixType: 'missing_skinparam',
-            targetLine: detectedBadLines[0]
-          };
-        }
-
-        return {
-          lines: detectedBadLines,
-          problem: `Instrucción no reconocida o texto accidental en la <b>Línea ${detectedBadLines.join(', Línea ')}</b>: <br><code>${escapeHtml(badText)}</code>`,
-          snippet: badText,
-          fixSolution: `Eliminar el texto accidental o convertirlo en una instrucción válida.`,
-          fixType: 'clean_junk',
-          targetLine: detectedBadLines[0]
-        };
-      }
-
-      // 5. Error devuelto por el servidor de compilación Kroki
+    function findExactCodeErrors(code, serverMsg = "", injectedLines = 0) {
       const serverLineMatch = serverMsg.match(/line:\s*(\d+)/i);
-      let sLine = serverLineMatch ? parseInt(serverLineMatch[1], 10) : 1;
-
+      let sLine = serverLineMatch ? parseInt(serverLineMatch[1], 10) : 0;
       if (injectedLines > 0 && sLine > injectedLines) {
         sLine = sLine - injectedLines;
       }
-      if (sLine < 1) sLine = 1;
-      if (sLine > lines.length) sLine = lines.length;
-
-      if (sLine < lines.length && lines[sLine] && !VALID_START_REGEX.test(lines[sLine].trim()) && !lines[sLine].trim().startsWith(':')) {
-        sLine = sLine + 1;
-      }
-
-      const problemSnippet = lines[sLine - 1] || '';
-      return {
-        lines: [sLine],
-        problem: `Error reportado por el motor en la <b>Línea ${sLine}</b>:<br><code>${escapeHtml(problemSnippet)}</code>`,
-        snippet: problemSnippet,
-        fixSolution: `Revisa comillas, flechas (-> o -->), nombres de participantes o sintaxis de la línea.`,
-        fixType: 'generic',
-        targetLine: sLine
-      };
+      return diagnoseAllCodeErrors(code, serverMsg, sLine);
     }
 
     function escapeHtml(str) {
@@ -2088,95 +2543,175 @@ Queue --> MS_Pay : Procesar cobro`
       mobileErrorToast.style.display = 'none';
     }
 
-    function showDetailedError(diag) {
-      currentErrorDiagnosis = diag;
+    function showDetailedError(errorsList) {
+      if (!errorsList) return;
+      if (!Array.isArray(errorsList)) errorsList = [errorsList];
+      if (errorsList.length === 0) return;
+
+      currentErrors = errorsList;
+      const primary = errorsList[0];
+      currentErrorDiagnosis = primary;
+
       activeErrorLines.clear();
-      diag.lines.forEach(l => activeErrorLines.add(l));
+      errorsList.forEach(e => {
+        if (e.line) activeErrorLines.add(e.line);
+        if (e.relatedLine) activeErrorLines.add(e.relatedLine);
+      });
       updateLineNumbers();
 
-      const linesStr = diag.lines.length > 1 ? `Líneas ${diag.lines.join(' y ')}` : `Línea ${diag.lines[0]}`;
+      const linesArr = Array.from(activeErrorLines).sort((a,b) => a - b);
+      const linesStr = linesArr.length > 1 ? `Líneas ${linesArr.join(', ')}` : `Línea ${linesArr[0]}`;
 
-      statusLeft.textContent = `❌ Error en ${linesStr}`;
+      statusLeft.textContent = `❌ Error en ${linesStr}: ${primary.title}`;
       statusLeft.style.color = "#ef4444";
 
       tabBadgeErr.style.display = 'inline-block';
-      mobileToastText.textContent = `⚠️ Error en ${linesStr}`;
+      mobileToastText.textContent = `⚠️ ${linesStr}: ${primary.title}`;
       mobileErrorToast.style.display = 'flex';
 
-      previewBox.style.background = document.body.classList.contains('light-mode') ? "#f8fafc" : "#0b0f19";
+      const isLight = document.body.classList.contains('light-mode');
+      previewBox.style.background = isLight ? "#f8fafc" : "#0b0f19";
 
-      let snippetHtml = diag.snippet ? `
-        <div class="error-label">Texto con error:</div>
-        <div class="error-code-box">${escapeHtml(diag.snippet)}</div>
-      ` : '';
+      const totalCount = errorsList.length;
+      const countBadge = totalCount > 1 ? `<span style="font-size: 0.78rem; opacity: 0.85;">(${totalCount} errores)</span>` : '';
+
+      let diffHtml = '';
+      if (primary.original && primary.fixed && primary.original.trim() !== primary.fixed.trim()) {
+        diffHtml = `
+          <div class="error-diff-box">
+            <div class="diff-original">
+              <span class="diff-tag diff-tag-err">❌ Con error (Línea ${primary.line}):</span>
+              <code>${escapeHtml(primary.original.trim())}</code>
+            </div>
+            <div class="diff-arrow">⬇️ Solución automática propuesta:</div>
+            <div class="diff-fixed">
+              <span class="diff-tag diff-tag-ok">✅ Corrección exacta:</span>
+              <code>${escapeHtml(primary.fixed.trim())}</code>
+            </div>
+          </div>
+        `;
+      } else if (primary.original) {
+        diffHtml = `
+          <div class="error-code-box">${escapeHtml(primary.original.trim())}</div>
+        `;
+      }
+
+      let fixAllBtn = '';
+      if (totalCount > 1) {
+        fixAllBtn = `
+          <button class="btn-fix-all" onclick="executeFixAll()">
+            🚀 Corregir TODOS los errores del diagrama (${totalCount})
+          </button>
+        `;
+      }
 
       previewBox.innerHTML = `
         <div class="error-card">
           <div class="error-title-row">
-            <span class="error-badge">⚠️ Error de Sintaxis</span>
-            <span class="error-lines-badge">${linesStr}</span>
+            <span class="error-badge">⚠️ Error de Sintaxis PlantUML</span>
+            <div style="display: flex; gap: 6px; align-items: center;">
+              ${countBadge}
+              <span class="error-lines-badge">${linesStr}</span>
+            </div>
           </div>
           <div class="error-label">¿QUÉ CÓDIGO ESTÁ MAL?</div>
-          <div class="error-text">${diag.problem}</div>
-          ${snippetHtml}
+          <div class="error-text">${primary.problem}</div>
+          ${diffHtml}
           <div class="error-label">¿CÓMO SOLUCIONARLO?</div>
-          <div class="error-text" style="border-left-color: #10b981; background: #f0fdf4;">
-            ${diag.fixSolution}
+          <div class="error-text" style="border-left-color: #10b981; background: ${isLight ? '#f0fdf4' : 'rgba(16, 185, 129, 0.1)'}; color: ${isLight ? '#065f46' : '#a7f3d0'};">
+            ${primary.solution}
           </div>
-          <button class="btn-fix" onclick="executeAutoFix()">
-            ⚡ Corregir este error automáticamente (1 Clic)
-          </button>
+          <div class="error-actions-row">
+            <button class="btn-fix" onclick="executeAutoFix()">
+              ⚡ Corregir automáticamente (1 Clic)
+            </button>
+            <button class="btn-goto" onclick="goToLine(${primary.line})">
+              🎯 Ir a la Línea ${primary.line}
+            </button>
+          </div>
+          ${fixAllBtn}
         </div>
       `;
     }
 
-    function executeAutoFix() {
-      if (!currentErrorDiagnosis) return;
-      const diag = currentErrorDiagnosis;
-      const type = diag.fixType;
-      let lines = editor.value.split('\n');
-
-      if (type === 'merge_split_skinparam') {
-        const l1 = diag.targetLine1 - 1;
-        const l2 = diag.targetLine2 - 1;
-        const line2Rest = lines[l2].trim().replace(/^(param|aram|ram|m)\s*/i, '');
-        lines[l1] = 'skinparam ' + line2Rest;
+    function applyFix(code, error) {
+      let lines = code.split('\n');
+      if (error.type === 'merge_split_skinparam') {
+        const l1 = error.line - 1;
+        const l2 = error.relatedLine - 1;
+        lines[l1] = error.fixed;
         lines.splice(l2, 1);
-        editor.value = lines.join('\n');
-      } else if (type === 'typo_skinparam') {
-        const idx = diag.targetLine - 1;
-        lines[idx] = lines[idx].replace(/^([a-zA-Z0-9_]+)\s+/, 'skinparam ');
-        editor.value = lines.join('\n');
-      } else if (type === 'missing_skinparam') {
-        const idx = diag.targetLine - 1;
-        lines[idx] = 'skinparam ' + lines[idx].trim();
-        editor.value = lines.join('\n');
-      } else if (type === 'activity_action_syntax') {
-        const idx = diag.targetLine - 1;
-        let raw = lines[idx].trim().replace(/^:+|;+$/g, '').trim();
-        lines[idx] = `:${raw};`;
-        editor.value = lines.join('\n');
-      } else if (type === 'close_unclosed_block') {
-        const closer = diag.closerKw || 'end';
+      } else if (error.type === 'unclosed_block') {
         let endUmlIdx = lines.findIndex(l => /^@enduml/i.test(l.trim()));
         if (endUmlIdx !== -1) {
-          lines.splice(endUmlIdx, 0, closer);
+          lines.splice(endUmlIdx, 0, error.closerKw);
         } else {
-          lines.push(closer);
+          lines.push(error.closerKw);
         }
-        editor.value = lines.join('\n');
-      } else if (type === 'clean_junk') {
-        const badSet = new Set(diag.lines.map(n => n - 1));
-        lines = lines.filter((_, idx) => !badSet.has(idx));
-        editor.value = lines.join('\n');
-      } else {
-        editor.value = '@startuml\n' + cleanCodeStyles(editor.value) + '\n@enduml';
+      } else if (error.line && error.fixed) {
+        lines[error.line - 1] = error.fixed;
+      }
+      return lines.join('\n');
+    }
+
+    function applyFixAll(code, errorsList) {
+      let lines = code.split('\n');
+      const sorted = [...errorsList].sort((a, b) => (b.line || 0) - (a.line || 0));
+      for (const err of sorted) {
+        if (err.type === 'merge_split_skinparam') {
+          const l1 = err.line - 1;
+          const l2 = err.relatedLine - 1;
+          lines[l1] = err.fixed;
+          lines.splice(l2, 1);
+        } else if (err.type === 'unclosed_block') {
+          let endUmlIdx = lines.findIndex(l => /^@enduml/i.test(l.trim()));
+          if (endUmlIdx !== -1) lines.splice(endUmlIdx, 0, err.closerKw);
+          else lines.push(err.closerKw);
+        } else if (err.line && err.fixed) {
+          lines[err.line - 1] = err.fixed;
+        }
+      }
+      return lines.join('\n');
+    }
+
+    function executeAutoFix() {
+      if (!currentErrors || currentErrors.length === 0) {
+        if (currentErrorDiagnosis) currentErrors = [currentErrorDiagnosis];
+        else return;
       }
 
+      const err = currentErrors[0];
+      const fixedCode = applyFix(editor.value, err);
+      editor.value = fixedCode;
+
+      const remaining = diagnoseAllCodeErrors(editor.value);
+      if (remaining.length > 0) {
+        showDetailedError(remaining);
+      } else {
+        currentErrors = [];
+        currentErrorDiagnosis = null;
+        activeErrorLines.clear();
+        hideErrorAlerts();
+        updateLineNumbers();
+        statusLeft.textContent = `✨ Línea ${err.line} corregida con éxito`;
+        statusLeft.style.color = "#34d399";
+        triggerRender(true);
+      }
+    }
+
+    function executeFixAll() {
+      if (!currentErrors || currentErrors.length === 0) return;
+      const count = currentErrors.length;
+      const fixedCode = applyFixAll(editor.value, currentErrors);
+      editor.value = fixedCode;
+
+      currentErrors = [];
       currentErrorDiagnosis = null;
       activeErrorLines.clear();
       hideErrorAlerts();
       updateLineNumbers();
+      statusLeft.textContent = `🎉 ¡Todos los errores (${count}) fueron corregidos con éxito!`;
+      statusLeft.style.color = "#34d399";
       triggerRender(true);
     }
 
@@ -2298,6 +2833,7 @@ Queue --> MS_Pay : Procesar cobro`
     async function render() {
       const code = editor.value.trim();
       if (!code) {
+        currentErrors = [];
         currentErrorDiagnosis = null;
         activeErrorLines.clear();
         hideErrorAlerts();
@@ -2309,6 +2845,13 @@ Queue --> MS_Pay : Procesar cobro`
         return;
       }
 
+      // 1. Diagnóstico de código en tiempo real (0 ms de latencia)
+      const clientErrors = diagnoseAllCodeErrors(editor.value);
+      if (clientErrors.length > 0) {
+        showDetailedError(clientErrors);
+        return;
+      }
+
       const themeSelect = document.getElementById('diagram-theme-select');
       const themeKey = themeSelect ? themeSelect.value : 'oscuro';
       const cacheKey = `${code}:::${themeKey}`;
@@ -2317,6 +2860,7 @@ Queue --> MS_Pay : Procesar cobro`
       previewBox.style.background = isDark ? '#1E1E2E' : '#FFFFFF';
 
       if (renderCache.has(cacheKey)) {
+        currentErrors = [];
         currentErrorDiagnosis = null;
         const cachedSvg = renderCache.get(cacheKey);
         currentSvg = cachedSvg;
@@ -2356,6 +2900,7 @@ Queue --> MS_Pay : Procesar cobro`
         const svg = await res.text();
         renderCache.set(cacheKey, svg);
         currentSvg = svg;
+        currentErrors = [];
         currentErrorDiagnosis = null;
         activeErrorLines.clear();
         hideErrorAlerts();
