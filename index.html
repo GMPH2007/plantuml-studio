@@ -2141,8 +2141,24 @@ Queue --> MS_Pay : Procesar cobro`
     let currentErrors = [];
 
     const COMMON_TYPOS = {
+      'partregfvicipant': 'participant',
       'partici8lpant': 'participant',
       'partiyticipant': 'participant',
+      'partiytycipant': 'participant',
+      'rffight': 'right',
+      'rihgt': 'right',
+      'rigth': 'right',
+      'righ': 'right',
+      'lef': 'left',
+      'leftt': 'left',
+      'foter': 'footer',
+      'fotter': 'footer',
+      'foooter': 'footer',
+      'endfoter': 'endfooter',
+      'endfoooter': 'endfooter',
+      'endfotter': 'endfooter',
+      'deessarrollado': 'Desarrollado',
+      'githubseb': 'GitHub',
       'partcipant': 'participant',
       'particpant': 'participant',
       'partisipant': 'participant',
@@ -2220,7 +2236,7 @@ Queue --> MS_Pay : Procesar cobro`
       'participant', 'actor', 'database', 'boundary', 'control', 'entity', 'collections', 'queue',
       'class', 'interface', 'abstract', 'enum', 'package', 'node', 'folder', 'frame', 'cloud',
       'storage', 'artifact', 'usecase', 'rectangle', 'state', 'component',
-      'skinparam', 'title', 'right footer', 'left footer', 'footer', 'endfooter', 'header', 'endheader',
+      'skinparam', 'title', 'right footer', 'left footer', 'right', 'left', 'footer', 'endfooter', 'header', 'endheader',
       'autonumber', 'scale', 'alt', 'else', 'opt', 'loop', 'group', 'end', 'ref', 'note',
       'start', 'stop', 'if', 'then', 'else', 'elseif', 'endif', 'while', 'endwhile', 'repeat', 'backward', 'fork', 'split', 'detach'
     ];
@@ -2254,14 +2270,32 @@ Queue --> MS_Pay : Procesar cobro`
 
       if (COMMON_TYPOS[t]) return COMMON_TYPOS[t];
 
-      if (/^parti[a-z0-9_]*pant$/i.test(t) || /^partic[a-z0-9_]{3,}$/i.test(t)) return 'participant';
-      if (/^ac?t[or]{2,}$/i.test(t)) return 'actor';
-      if (/^data[a-z0-9_]*base$/i.test(t)) return 'database';
+      // Participant variations (including keyboard mash like partregfvicipant, partici8lpant, partiytycipant, etc.)
+      if (t.startsWith('part') && (t.includes('cip') || t.includes('pan') || t.endsWith('nt') || t.length >= 7)) return 'participant';
+      if (/^part[a-z0-9_]*(?:cipant|pant|ipant|cpa?nt)$/i.test(t)) return 'participant';
+
+      // Actor variations
+      if (/^ac?t[a-z0-9_]*or$/i.test(t) || (t.startsWith('act') && t.length <= 7)) return 'actor';
+
+      // Database variations
+      if (/^data[a-z0-9_]*base$/i.test(t) || /^d[a-z0-9_]*base$/i.test(t)) return 'database';
+
+      // Skinparam variations
+      if (/^sk[a-z0-9_]*param\w*$/i.test(t) || /^skin[a-z0-9_]*$/i.test(t)) return 'skinparam';
+
+      // Right / Left / Footer
+      if (/^r[a-z0-9_]*ight$/i.test(t)) return 'right';
+      if (/^l[a-z0-9_]*eft$/i.test(t)) return 'left';
+      if (/^foot[a-z0-9_]*$/i.test(t) || /^f[a-z0-9_]*ter$/i.test(t)) return 'footer';
+      if (/^end[a-z0-9_]*foot[a-z0-9_]*$/i.test(t)) return 'endfooter';
+      if (/^end[a-z0-9_]*head[a-z0-9_]*$/i.test(t)) return 'endheader';
+
+      // Interface / Rectangle / Component / Class
       if (/^interf[a-z0-9_]+$/i.test(t)) return 'interface';
       if (/^clas[a-z0-9_]*$/i.test(t)) return 'class';
       if (/^rect[a-z0-9_]+$/i.test(t)) return 'rectangle';
       if (/^comp[a-z0-9_]+$/i.test(t)) return 'component';
-      if (/^sk[a-z0-9_]*param\w*$/i.test(t)) return 'skinparam';
+      if (/^tit[a-z0-9_]*le$/i.test(t)) return 'title';
 
       let best = null;
       let minD = 999;
@@ -2338,7 +2372,7 @@ Queue --> MS_Pay : Procesar cobro`
           hasExplicitDeclarations = true;
         }
 
-        if (/^(right\s+footer|left\s+footer|footer)\b/i.test(t)) openBlocks.footer.push(idx + 1);
+        if (/^(?:r[a-z0-9_]*ight|l[a-z0-9_]*eft)\s+f[a-z0-9_]*ter\b/i.test(t) || /^(right\s+footer|left\s+footer|footer)\b/i.test(t)) openBlocks.footer.push(idx + 1);
         else if (/^(header|right\s+header|left\s+header)\b/i.test(t)) openBlocks.header.push(idx + 1);
         else if (/^note\s+(left|right|over|bottom|top)\b/i.test(t) && !t.includes(':') && !t.includes('end note')) openBlocks.note.push(idx + 1);
         else if (/^if\s*\([^)]*\)\s*then/i.test(t)) openBlocks.if.push(idx + 1);
@@ -2355,6 +2389,29 @@ Queue --> MS_Pay : Procesar cobro`
         const rawLine = lines[i];
         const trimmed = rawLine.trim();
         if (!trimmed) continue;
+
+        // 0. Directivas compuestas mal escritas (ej: rffight footer, leftt footer, etc.)
+        const multiWordMatch = trimmed.match(/^(?:r[a-z0-9_]*ight|l[a-z0-9_]*eft)\s+(?:f[a-z0-9_]*ter|footer)\b/i);
+        if (multiWordMatch) {
+          const isRight = /^r/i.test(trimmed);
+          const correctPrefix = isRight ? 'right footer' : 'left footer';
+          if (!trimmed.toLowerCase().startsWith(correctPrefix)) {
+            const fixed = trimmed.replace(/^(?:r[a-z0-9_]*ight|l[a-z0-9_]*eft)\s+(?:f[a-z0-9_]*ter|footer)\b/i, correctPrefix);
+            const badToken = trimmed.split(/\s+/).slice(0, 2).join(' ');
+            errors.push({
+              line: lineNum,
+              type: 'keyword_typo',
+              original: rawLine,
+              fixed: fixed,
+              firstWord: badToken,
+              bestKw: correctPrefix,
+              title: `Directiva mal escrita (${badToken} ➔ ${correctPrefix})`,
+              problem: `En la <b>Línea ${lineNum}</b> escribiste <code>${escapeHtml(badToken)}</code>.<br>La directiva correcta en PlantUML es <code>${escapeHtml(correctPrefix)}</code>.`,
+              solution: `Cambiar por <code>${escapeHtml(correctPrefix)}</code>: <code>${escapeHtml(fixed)}</code>`
+            });
+            continue;
+          }
+        }
 
         // 1. Detección de comillas de comentario accidentales (' ' ' actor ...)
         const strayCommentMatch = trimmed.match(/^['\s]{2,}(actor|participant|database|boundary|control|entity|collections|queue|class|interface|rectangle|component|skinparam|title|start|stop|if|while|note|end)\b(.*)$/i) ||
@@ -2621,7 +2678,7 @@ Queue --> MS_Pay : Procesar cobro`
         }
 
         if (errors.length === 0) {
-          const candidateLines = [serverLine, serverLine + 1, serverLine - 1].filter(l => l >= 1 && l <= lines.length);
+          const candidateLines = [serverLine, serverLine + 1, serverLine - 1, serverLine + 2, serverLine - 2].filter(l => l >= 1 && l <= lines.length);
           let foundCandidate = false;
 
           for (const cLine of candidateLines) {
@@ -2650,14 +2707,29 @@ Queue --> MS_Pay : Procesar cobro`
 
           if (!foundCandidate) {
             const badSnippet = lines[serverLine - 1] || '';
+            let fixedSnippet = '';
+            let fixExplanation = '';
+
+            const quoteCount = (badSnippet.match(/"/g) || []).length;
+            if (quoteCount % 2 !== 0) {
+              fixedSnippet = badSnippet + '"';
+              fixExplanation = `Cerrar la comilla doble faltante: <code>${escapeHtml(fixedSnippet)}</code>`;
+            } else if (/^[\w"().\s]+(-->|->|<-|<--)\s*[\w"().\s]+[^:]+$/i.test(badSnippet.trim()) && !badSnippet.includes(':')) {
+              fixedSnippet = badSnippet.replace(/^([\w"().\s]+(-->|->|<-|<--)\s*[\w"().\s]+)(\s+.*)$/i, '$1: $3');
+              fixExplanation = `Agregar dos puntos <code>:</code> al mensaje de la flecha: <code>${escapeHtml(fixedSnippet)}</code>`;
+            } else {
+              fixedSnippet = `' ${badSnippet.trim()}`;
+              fixExplanation = `Comentar esta línea temporalmente con <code>'</code> para permitir que el compilador procese el resto del diagrama.`;
+            }
+
             errors.push({
               line: serverLine,
               type: 'server_reported',
               original: badSnippet,
-              fixed: badSnippet,
+              fixed: fixedSnippet,
               title: `Error sintáctico en Línea ${serverLine}`,
               problem: `Error reportado por el motor en la <b>Línea ${serverLine}</b>:<br><code>${escapeHtml(badSnippet)}</code>`,
-              solution: `Haz clic en 'Ir a la Línea ${serverLine}' para revisar comillas dobles, nombres de participantes o flechas (->).`
+              solution: fixExplanation
             });
           }
         }
@@ -2762,15 +2834,19 @@ Queue --> MS_Pay : Procesar cobro`
           <div class="error-text" style="border-left-color: #10b981; background: ${isLight ? '#f0fdf4' : 'rgba(16, 185, 129, 0.1)'}; color: ${isLight ? '#065f46' : '#a7f3d0'};">
             ${primary.solution}
           </div>
+          ${totalCount > 1 ? `
+          <button class="btn-fix-all" onclick="executeFixAll()" style="background: linear-gradient(135deg, #10b981, #059669); color: white; font-weight: 700; font-size: 0.95rem; padding: 12px 18px; border-radius: 8px; border: none; cursor: pointer; box-shadow: 0 4px 14px rgba(16,185,129,0.35); display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; margin-bottom: 8px;">
+            🚀 Corregir TODOS los errores del diagrama (${totalCount})
+          </button>
+          ` : ''}
           <div class="error-actions-row">
             <button class="btn-fix" onclick="executeAutoFix()">
-              ⚡ Corregir automáticamente (1 Clic)
+              ${totalCount > 1 ? `⚡ Corregir solo Línea ${primary.line} (1 Clic)` : `⚡ Corregir automáticamente (1 Clic)`}
             </button>
             <button class="btn-goto" onclick="goToLine(${primary.line})">
               🎯 Ir a la Línea ${primary.line}
             </button>
           </div>
-          ${fixAllBtn}
         </div>
       `;
     }
@@ -2825,15 +2901,16 @@ Queue --> MS_Pay : Procesar cobro`
       const fixedCode = applyFix(editor.value, err);
       editor.value = fixedCode;
 
+      updateLineNumbers();
       const remaining = diagnoseAllCodeErrors(editor.value);
       if (remaining.length > 0) {
         showDetailedError(remaining);
+        triggerRender(true);
       } else {
         currentErrors = [];
         currentErrorDiagnosis = null;
         activeErrorLines.clear();
         hideErrorAlerts();
-        updateLineNumbers();
         statusLeft.textContent = `✨ Línea ${err.line} corregida con éxito`;
         statusLeft.style.color = "#34d399";
         triggerRender(true);
